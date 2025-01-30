@@ -3,38 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fournisseur;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Services\FournisseurService;
 
-class FournisseurController extends Controller {
+class FournisseurController extends Controller
+{
+    protected $fournisseurService;
+
+    public function __construct(FournisseurService $fournisseurService)
+    {
+        $this->fournisseurService = $fournisseurService;
+    }
 
     public function index()
     {
-        return response(Fournisseur::all());
+        $fournisseurs = $this->fournisseurService->getFournisseurs();
+        return response()->json($fournisseurs);
     }
 
     public function store(Request $request)
     {
-        return response(Fournisseur::create($request->all()));
+        $fournisseur = $this->fournisseurService->saveFournisseur($request->all());
+        return response()->json($fournisseur);
     }
 
-    public function show(Fournisseur $fournisseur){
-        return response()->json([
-            'fournisseur' => $fournisseur
-        ]);
+    public function show(Fournisseur $fournisseur)
+    {
+        return response()->json(['fournisseur' => $fournisseur]);
     }
- 
-    public function update(Request $request, Fournisseur $fournisseur){
-        $fournisseur->update($request->all());
-        return response()->json([
-            'message' => 'Item updated successfully'
-        ]);
+
+    public function update(Request $request, Fournisseur $fournisseur)
+    {
+        $updateFournisseur = $this->fournisseurService->updateFournisseur($fournisseur, $request->all());
+        return response()->json($updateFournisseur);
     }
 
     public function destroy(Fournisseur $fournisseur)
     {
-        return response($fournisseur->delete());
+        return $this->fournisseurService->deleteFournisseur($fournisseur);
     }
 }

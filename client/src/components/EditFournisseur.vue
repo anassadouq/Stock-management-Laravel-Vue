@@ -56,21 +56,20 @@ onMounted(async () => {
                 <form @submit.prevent="handleUpdate">
                     <div>
                         <label for="nom">Nom</label>
-                        <input type="text" v-model="form.nom" id="nom" placeholder="Nom" />
+                        <!-- Use only v-model to bind the value -->
+                        <input type="text" v-model="form.nom" placeholder="Nom" />
                     </div>
                     <div class="mb-4">
                         <label for="adresse">Adresse</label>
-                        <input type="text" v-model="form.adresse" id="adresse" placeholder="Adresse" />
+                        <input type="text" v-model="form.adresse" placeholder="Adresse" />
                     </div>
                     <div class="mb-4">
                         <label for="tel">Tel</label>
-                        <input type="text" v-model="form.tel" id="tel" placeholder="Tel" />
+                        <input type="text" v-model="form.tel" placeholder="Tel" />
                     </div>
 
                     <div>
-                        <button type="submit">
-                            Edit fournisseur
-                        </button>
+                        <button type="submit">Edit</button>
                     </div>
                 </form>
             </div>
