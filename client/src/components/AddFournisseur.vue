@@ -23,12 +23,12 @@ const handleSubmit = async () => {
 
     try {
         const response = await axios.post('http://127.0.0.1:8000/api/fournisseur', newFournisseur);
-        toast.success('Fournisseur ajouté avec succès');
+        toast.success('Fournisseur added successfully');
         router.push('/fournisseur');
     } catch (error) {
         console.error('Erreur lors de l\'ajout du fournisseur', error);
         errorMessage.value = 'Impossible d\'ajouter le fournisseur. Veuillez vérifier les informations.';
-        toast.error('Erreur lors de l\'ajout du fournisseur');
+        toast.error('Fournisseur was not added');
     }
 };
 </script>

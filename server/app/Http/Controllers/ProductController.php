@@ -3,52 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Fournisseur;
 use Illuminate\Http\Request;
+use App\Services\ProductService;
 
 class ProductController extends Controller
 {
+    protected $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     public function index()
     {
-        $products = Product::all();
+        $products = $this->productService->getProducts();
         return response()->json($products);
     }
 
     public function store(Request $request)
     {
-        $product = Product::create($request->all());
-        return response()->json($product, 201);
+        $product = $this->productService->saveProduct($request->all());
+        return response()->json($product);
     }
 
     public function show($fournisseur_id)
     {
-        $fournisseur = Fournisseur::find($fournisseur_id);
-        $product = Product::where('fournisseur_id', $fournisseur_id)->get();
-    
-        return response()->json(['fournisseur' => $fournisseur, 'product' => $product]);
+        $data = $this->productService->showProduct($fournisseur_id);
+        return response()->json($data);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['error' => 'product not found'], 404);
-        }
-
-        $product->update($request->all());
-        return response()->json($product);
+        $updateProduct = $this->productService->updateProduct($product, $request->all());
+        return response()->json($updateProduct);
     }
 
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $product = Product::findOrFail($id);
-        $fournisseur_id = $product->fournisseur_id;
-        if (!$product) {
-            return response()->json(['error' => 'product not found'], 404);
-        }
-
-        $product->delete();
-        return response()->json(['message' => 'Item deleted successfully']);
+        return $this->productService->deleteProduct($product);
     }
 }

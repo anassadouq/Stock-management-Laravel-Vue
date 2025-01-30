@@ -7,6 +7,9 @@ const fournisseurs = ref([]);
 const errorMessage = ref('');
 const route = useRoute();
 const router = useRouter();
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 const fournisseurId = route.params.id;
 
@@ -17,6 +20,7 @@ const fetchFournisseurs = async () => {
     } catch (error) {
         console.error('Erreur lors du chargement des fournisseurs', error);
         errorMessage.value = 'Impossible de charger les fournisseurs.';
+
     }
 };
 
@@ -26,9 +30,12 @@ const deleteFournisseur = async (id) => {
         if (confirmDelete) {
             await axios.delete(`http://127.0.0.1:8000/api/fournisseur/${id}`);
             fetchFournisseurs();
+            toast.success('Fournisseur deleted successfully');
         }
     } catch (error) {
         console.error('Error deleting Fournisseur', error);
+        toast.error('Fournisseur was not deleted');
+
     }
 };
 
