@@ -14,6 +14,6 @@ class Fournisseur extends Model
     ];
 
     public function produits() {
-        return $this->belongsToMany(Product::class, 'fournisseur_produit');
+        return $this->hasMany(Product::class, 'fournisseur_id');
     }
 }

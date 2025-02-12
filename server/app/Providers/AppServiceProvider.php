@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 //Interfaces
-use App\Interfaces\FournisseurInterface;
+use App\Interfaces\ClientInterface;
 use App\Interfaces\ProductInterface;
+use App\Interfaces\FournisseurInterface;
 
 //Repositories
+use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\FournisseurRepository;
 
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(FournisseurInterface::class, FournisseurRepository::class);
         $this->app->bind(ProductInterface::class, ProductRepository::class);
+        $this->app->bind(ClientInterface::class, ClientRepository::class);
     }
 
     public function boot()

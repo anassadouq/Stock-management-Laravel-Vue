@@ -9,6 +9,11 @@ import Product from "@/components/Product/Product.vue";
 import CreateProduct from "@/components/Product/CreateProduct.vue";
 import EditProduct from "@/components/Product/EditProduct.vue";
 
+// Client
+import Client from "@/components/Client/Client.vue";
+import CreateClient from "@/components/Client/CreateClient.vue";
+import EditClient from "@/components/Client/EditClient.vue";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -51,6 +56,23 @@ const router = createRouter({
             path: '/product/edit/:id',
             name: 'edit-product',
             component: EditProduct
+        },
+
+        // Clients
+        {
+            path: '/client',
+            name: 'client',
+            component: Client,
+        },
+        {
+            path: '/client/create',
+            name: 'createClient',
+            component: CreateClient,
+        },
+        {
+            path: '/client/edit/:id',
+            name: 'edit-client',
+            component: EditClient
         },
     ],
 });

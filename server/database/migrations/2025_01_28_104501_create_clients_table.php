@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('tel');
-            $table->string('qte');
+            $table->string('adresse');
             $table->timestamps();
         });
     }

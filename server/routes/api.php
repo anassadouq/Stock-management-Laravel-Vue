@@ -9,7 +9,5 @@ use App\Http\Controllers\FournisseurController;
 Route::resource('fournisseur', FournisseurController::class);
 
 Route::resource('product', ProductController::class);
-Route::get('product/show/{fournisseur_id}', [ProductController::class, 'show']);
 
 Route::resource('client', ClientController::class);
-Route::get('client/show/{product_id}', [ClientController::class, 'show']);
