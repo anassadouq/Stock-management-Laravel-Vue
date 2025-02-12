@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Fournisseur;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 
 class ProductController extends Controller
 {
     protected $productService;
-
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
@@ -27,18 +27,20 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function show($fournisseur_id)
+    // Show a single product with its fournisseur details
+    public function show(Product $product)
     {
-        $data = $this->productService->showProduct($fournisseur_id);
-        return response()->json($data);
+        return response()->json(['product' => $product->load('fournisseur')]);
     }
 
+    // Update a product
     public function update(Request $request, Product $product)
     {
         $updateProduct = $this->productService->updateProduct($product, $request->all());
         return response()->json($updateProduct);
     }
 
+    // Delete a product
     public function destroy(Product $product)
     {
         return $this->productService->deleteProduct($product);

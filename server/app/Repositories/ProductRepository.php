@@ -10,7 +10,7 @@ class ProductRepository implements ProductInterface
 {
     public function getProducts()
     {
-        return Product::all();
+        return Product::with('fournisseur')->get();
     }
 
     public function saveProduct($product)

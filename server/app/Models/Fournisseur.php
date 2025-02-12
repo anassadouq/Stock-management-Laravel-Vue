@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Fournisseur extends Model
 {
@@ -11,4 +12,8 @@ class Fournisseur extends Model
     protected $fillable = [
         'nom', 'adresse', 'tel'
     ];
+
+    public function produits() {
+        return $this->belongsToMany(Product::class, 'fournisseur_produit');
+    }
 }
