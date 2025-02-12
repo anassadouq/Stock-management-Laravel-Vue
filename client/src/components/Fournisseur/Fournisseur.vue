@@ -62,7 +62,6 @@
                         <td>{{ fournisseur.adresse }}</td>
                         <td>{{ fournisseur.tel }}</td>
                         <td>
-                            <RouterLink :to="`/product/show/${fournisseur.id}`">Show</RouterLink>
                             <RouterLink :to="`/fournisseur/edit/${fournisseur.id}`">Edit</RouterLink>
                             <button @click="deleteFournisseur(fournisseur.id)" >Delete</button>
                         </td>

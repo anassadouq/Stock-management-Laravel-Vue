@@ -12,6 +12,13 @@ import EditProduct from "@/components/Product/EditProduct.vue";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        
+        {
+            path: '/',
+            name: 'home',
+            component: Fournisseur,
+        },
+        
         // Fournisseur
         {
             path: '/fournisseur',
@@ -31,17 +38,17 @@ const router = createRouter({
 
         // Products
         {
-            path: '/product/show/:fournisseur_id',
+            path: '/product',
             name: 'product',
             component: Product,
         },
         {
-            path: '/product/show/:fournisseur_id/create',
+            path: '/product/create',
             name: 'CreateProduct',
             component: CreateProduct,
         },
         {
-            path: '/product/show/:id/edit',
+            path: '/product/edit/:id',
             name: 'edit-product',
             component: EditProduct
         },
