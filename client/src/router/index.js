@@ -14,6 +14,11 @@ import Client from "@/components/Client/Client.vue";
 import CreateClient from "@/components/Client/CreateClient.vue";
 import EditClient from "@/components/Client/EditClient.vue";
 
+// Achat
+import Achat from "@/components/Achat/Achat.vue";
+import CreateAchat from "@/components/Achat/CreateAchat.vue";
+import EditAchat from "@/components/Achat/EditAchat.vue";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -73,6 +78,23 @@ const router = createRouter({
             path: '/client/edit/:id',
             name: 'edit-client',
             component: EditClient
+        },
+
+        // Achat
+        {
+            path: '/achat/show/:client_id',
+            name: 'show-achat',
+            component: Achat
+        },
+        {
+            path: '/achat/show/:client_id/create',
+            name: 'createachat',
+            component: CreateAchat,
+        },
+        {
+            path: '/achat/show/:id/edit',
+            name: 'edit-achat',
+            component: EditAchat
         },
     ],
 });

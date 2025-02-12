@@ -60,6 +60,7 @@
                         <td>{{ client.adresse }}</td>
                         <td>{{ client.tel }}</td>
                         <td>
+                            <RouterLink :to="`/achat/show/${client.id}`">Show</RouterLink>
                             <RouterLink :to="`/client/edit/${client.id}`">Edit</RouterLink>
                             <button @click="deleteClient(client.id)" >Delete</button>
                         </td>
