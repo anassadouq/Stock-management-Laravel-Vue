@@ -10,7 +10,7 @@ class AchatRepository implements AchatInterface
 {
     public function getAchats()
     {
-        return Achat::with('client','product')->get();
+        return Achat::all();
     }
 
     public function saveAchat($achat)
@@ -20,13 +20,16 @@ class AchatRepository implements AchatInterface
 
     public function showAchat($client_id)
     {
-        $client = Client::find($client_id);
-        $product = Product::where('client_id', $client_id)->get();
-
-        return [
+        $client = Client::with('achats.product')->find($client_id);
+    
+        if (!$client) {
+            return response()->json(['error' => 'Client not found'], 404);
+        }
+    
+        return response()->json([
             'client' => $client,
-            'product' => $product
-        ];
+            'achats' => $client->achats,
+        ]);
     }
 
     public function updateAchat($achat, $data)

@@ -43,6 +43,7 @@ class ProductController extends Controller
     // Delete a product
     public function destroy(Product $product)
     {
-        return $this->productService->deleteProduct($product);
+        $this->productService->deleteProduct($product);
+        return response()->json(['message' => 'Achat deleted successfully']);
     }
 }
