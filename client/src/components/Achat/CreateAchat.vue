@@ -49,8 +49,6 @@
     onMounted(fetchProducts);
 </script>
 
-
-
 <template>
     <section class="bg-green-50">
         <div class="container m-auto max-w-2xl py-24">
@@ -58,12 +56,9 @@
                 <form @submit.prevent="handleSubmit">
                     <h2 class="text-3xl text-center font-semibold mb-6">Ajouter un achat</h2>
 
-                    <!-- Sélection du produit -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Produit</label>
-                        <select v-model="form.product_id"
-                                name="product_id"
-                                class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
+                        <select v-model="form.product_id" name="product_id" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
                             <option value="" disabled>Choisissez un produit</option>
                             <option v-for="product in products" :key="product.id" :value="product.id">
                                 {{ product.designation }} - {{ product.pu }} DH
@@ -71,14 +66,9 @@
                         </select>
                     </div>
 
-                    <!-- Quantité -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" 
-                               v-model="form.qte" 
-                               name="qte" 
-                               placeholder="Quantité" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" v-model="form.qte" name="qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>

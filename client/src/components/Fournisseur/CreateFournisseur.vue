@@ -1,36 +1,36 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import router from '@/router';
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
+    import { reactive, ref } from 'vue';
+    import router from '@/router';
+    import axios from 'axios';
+    import { useToast } from 'vue-toastification';
 
-const toast = useToast();
+    const toast = useToast();
 
-const form = reactive({
-    nom: '',
-    adresse: '',
-    tel: '',
-});
+    const form = reactive({
+        nom: '',
+        adresse: '',
+        tel: '',
+    });
 
-const errorMessage = ref('');
+    const errorMessage = ref('');
 
-const handleSubmit = async () => {
-    const newFournisseur = {
-        nom: form.nom,
-        adresse: form.adresse,
-        tel: form.tel,
+    const handleSubmit = async () => {
+        const newFournisseur = {
+            nom: form.nom,
+            adresse: form.adresse,
+            tel: form.tel,
+        };
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/fournisseur', newFournisseur);
+            toast.success('Fournisseur added successfully');
+            router.push('/fournisseur');
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du fournisseur', error);
+            errorMessage.value = 'Impossible d\'ajouter le fournisseur. Veuillez vérifier les informations.';
+            toast.error('Fournisseur was not added');
+        }
     };
-
-    try {
-        const response = await axios.post('http://127.0.0.1:8000/api/fournisseur', newFournisseur);
-        toast.success('Fournisseur added successfully');
-        router.push('/fournisseur');
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout du fournisseur', error);
-        errorMessage.value = 'Impossible d\'ajouter le fournisseur. Veuillez vérifier les informations.';
-        toast.error('Fournisseur was not added');
-    }
-};
 </script>
 
 <template>
@@ -42,29 +42,17 @@ const handleSubmit = async () => {
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Nom</label>
-                        <input type="text" 
-                               v-model="form.nom" 
-                               name="nom" 
-                               placeholder="Nom" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.nom" name="nom" placeholder="Nom" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Adresse</label>
-                        <input type="text" 
-                               v-model="form.adresse" 
-                               name="adresse" 
-                               placeholder="Adresse" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.adresse" name="adresse" placeholder="Adresse" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Téléphone</label>
-                        <input type="text" 
-                               v-model="form.tel" 
-                               name="tel" 
-                               placeholder="Téléphone" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.tel" name="tel" placeholder="Téléphone" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>

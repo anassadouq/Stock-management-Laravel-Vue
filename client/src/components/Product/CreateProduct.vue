@@ -1,55 +1,55 @@
 <script setup>
-import { reactive, ref, onMounted } from 'vue';
-import router from '@/router';
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
+    import { reactive, ref, onMounted } from 'vue';
+    import router from '@/router';
+    import axios from 'axios';
+    import { useToast } from 'vue-toastification';
 
-const toast = useToast();
+    const toast = useToast();
 
-const form = reactive({
-    fournisseur_id: '',
-    code: '',
-    designation: '',
-    qte: '',
-    pu: '',
-});
+    const form = reactive({
+        fournisseur_id: '',
+        code: '',
+        designation: '',
+        qte: '',
+        pu: '',
+    });
 
-const fournisseurs = ref([]); // Store fournisseurs
-const errorMessage = ref('');
+    const fournisseurs = ref([]); // Store fournisseurs
+    const errorMessage = ref('');
 
-// Fetch fournisseurs from API
-const fetchFournisseurs = async () => {
-    try {
-        const response = await axios.get('http://127.0.0.1:8000/api/fournisseur');
-        fournisseurs.value = response.data; // Assuming API returns an array of fournisseurs
-    } catch (error) {
-        console.error('Erreur lors du chargement des fournisseurs', error);
-    }
-};
-
-// Fetch fournisseurs when component is mounted
-onMounted(fetchFournisseurs);
-
-// Handle form submission
-const handleSubmit = async () => {
-    const newproduct = {
-        fournisseur_id: form.fournisseur_id,
-        code: form.code,
-        designation: form.designation,
-        qte: form.qte,
-        pu: form.pu,
+    // Fetch fournisseurs from API
+    const fetchFournisseurs = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/fournisseur');
+            fournisseurs.value = response.data; // Assuming API returns an array of fournisseurs
+        } catch (error) {
+            console.error('Erreur lors du chargement des fournisseurs', error);
+        }
     };
 
-    try {
-        const response = await axios.post('http://127.0.0.1:8000/api/product', newproduct);
-        toast.success('Product added successfully');
-        router.push('/product');
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout du product', error);
-        errorMessage.value = 'Impossible d\'ajouter le product. Veuillez vérifier les informations.';
-        toast.error('Product was not added');
-    }
-};
+    // Fetch fournisseurs when component is mounted
+    onMounted(fetchFournisseurs);
+
+    // Handle form submission
+    const handleSubmit = async () => {
+        const newproduct = {
+            fournisseur_id: form.fournisseur_id,
+            code: form.code,
+            designation: form.designation,
+            qte: form.qte,
+            pu: form.pu,
+        };
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/product', newproduct);
+            toast.success('Product added successfully');
+            router.push('/product');
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du product', error);
+            errorMessage.value = 'Impossible d\'ajouter le product. Veuillez vérifier les informations.';
+            toast.error('Product was not added');
+        }
+    };
 </script>
 
 
@@ -62,8 +62,7 @@ const handleSubmit = async () => {
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <select v-model="form.fournisseur_id" 
-                                class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
+                        <select v-model="form.fournisseur_id" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
                             <option value="" disabled selected>Choisissez un fournisseur</option>
                             <option v-for="fournisseur in fournisseurs" :key="fournisseur.id" :value="fournisseur.id">
                                 {{ fournisseur.nom }}
@@ -73,34 +72,22 @@ const handleSubmit = async () => {
                     
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Code</label>
-                        <input type="text" 
-                               v-model="form.code" 
-                               placeholder="Code" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.code" placeholder="Code" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Désignation</label>
-                        <input type="text" 
-                               v-model="form.designation" 
-                               placeholder="Désignation" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.designation" placeholder="Désignation" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" 
-                               v-model="form.qte" 
-                               placeholder="Quantité" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" v-model="form.qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Prix Unitaire</label>
-                        <input type="number" 
-                               v-model="form.pu" 
-                               placeholder="Prix Unitaire" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" v-model="form.pu" placeholder="Prix Unitaire" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>

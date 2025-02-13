@@ -1,37 +1,37 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
+    import { ref, onMounted } from 'vue';
+    import axios from 'axios';
+    import { useToast } from 'vue-toastification';
 
-const products = ref([]);
-const errorMessage = ref('');
-const toast = useToast();
+    const products = ref([]);
+    const errorMessage = ref('');
+    const toast = useToast();
 
-const fetchProducts = async () => {
-    try {
-        const response = await axios.get('http://127.0.0.1:8000/api/product');
-        products.value = response.data;
-    } catch (error) {
-        console.error('Erreur lors du chargement des products', error);
-        errorMessage.value = 'Impossible de charger les products.';
-    }
-};
-
-const deleteProduct = async (id) => {
-    try {
-        const confirmDelete = window.confirm('Are you sure you want to delete this product?');
-        if (confirmDelete) {
-            await axios.delete(`http://127.0.0.1:8000/api/product/${id}`);
-            fetchProducts();
-            toast.success('Product deleted successfully');
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/product');
+            products.value = response.data;
+        } catch (error) {
+            console.error('Erreur lors du chargement des products', error);
+            errorMessage.value = 'Impossible de charger les products.';
         }
-    } catch (error) {
-        console.error('Error deleting product', error);
-        toast.error('Product was not deleted');
-    }
-};
+    };
 
-onMounted(fetchProducts);
+    const deleteProduct = async (id) => {
+        try {
+            const confirmDelete = window.confirm('Are you sure you want to delete this product?');
+            if (confirmDelete) {
+                await axios.delete(`http://127.0.0.1:8000/api/product/${id}`);
+                fetchProducts();
+                toast.success('Product deleted successfully');
+            }
+        } catch (error) {
+            console.error('Error deleting product', error);
+            toast.error('Product was not deleted');
+        }
+    };
+
+    onMounted(fetchProducts);
 </script>
 
 <template>

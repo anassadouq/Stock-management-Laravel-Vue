@@ -1,52 +1,52 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import axios from 'axios';
-import { useToast } from 'vue-toastification';
+    import { reactive, onMounted } from 'vue';
+    import { useRouter, useRoute } from 'vue-router';
+    import axios from 'axios';
+    import { useToast } from 'vue-toastification';
 
-const route = useRoute();
-const router = useRouter();
-const toast = useToast();
+    const route = useRoute();
+    const router = useRouter();
+    const toast = useToast();
 
-const clientId = route.params.id;
+    const clientId = route.params.id;
 
-const form = reactive({
-    nom: '',
-    adresse: '',
-    tel: '',
-});
+    const form = reactive({
+        nom: '',
+        adresse: '',
+        tel: '',
+    });
 
-const handleUpdate = async () => {
-    const updateclient = {
-        nom: form.nom,
-        adresse: form.adresse,
-        tel: form.tel,
+    const handleUpdate = async () => {
+        const updateclient = {
+            nom: form.nom,
+            adresse: form.adresse,
+            tel: form.tel,
+        };
+
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/client/${clientId}`, updateclient);
+            toast.success('client updated successfully');
+            router.push(`/client`);
+        } catch (error) {
+            console.error('Error updating client', error);
+            toast.error('client was not updated');
+        }
     };
 
-    try {
-        const response = await axios.put(`http://127.0.0.1:8000/api/client/${clientId}`, updateclient);
-        toast.success('client updated successfully');
-        router.push(`/client`);
-    } catch (error) {
-        console.error('Error updating client', error);
-        toast.error('client was not updated');
-    }
-};
+    onMounted(async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/client/${clientId}`);
+            const client = response.data.client;
 
-onMounted(async () => {
-    try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/client/${clientId}`);
-        const client = response.data.client;
-
-        // Populate the form with the fetched client data
-        form.nom = client.nom;
-        form.adresse = client.adresse;
-        form.tel = client.tel;
-    } catch (error) {
-        console.error('Error fetching client', error);
-        toast.error('Failed to fetch client details.');
-    }
-});
+            // Populate the form with the fetched client data
+            form.nom = client.nom;
+            form.adresse = client.adresse;
+            form.tel = client.tel;
+        } catch (error) {
+            console.error('Error fetching client', error);
+            toast.error('Failed to fetch client details.');
+        }
+    });
 </script>
 
 <template>
@@ -56,15 +56,15 @@ onMounted(async () => {
                 <form @submit.prevent="handleUpdate">
                     <div>
                         <label for="nom">Nom</label>
-                        <input type="text" v-model="form.nom" placeholder="Nom" />
+                        <input type="text" v-model="form.nom"/>
                     </div>
                     <div class="mb-4">
                         <label for="adresse">Adresse</label>
-                        <input type="text" v-model="form.adresse" placeholder="Adresse" />
+                        <input type="text" v-model="form.adresse"/>
                     </div>
                     <div class="mb-4">
                         <label for="tel">Tel</label>
-                        <input type="text" v-model="form.tel" placeholder="Tel" />
+                        <input type="text" v-model="form.tel"/>
                     </div>
 
                     <div>
