@@ -62,7 +62,6 @@
                         <td>{{ achat.qte }}</td>
                         <td>{{ achat.qte * achat.product.pu + ' DH' }}</td>
                         <td>
-                            <RouterLink :to="`/achat/show/${achat.id}/edit?client_id=${achat.client_id}`">Edit</RouterLink>
                             <button @click="deleteAchat(achat.id)">Delete</button>
                         </td>
                     </tr>

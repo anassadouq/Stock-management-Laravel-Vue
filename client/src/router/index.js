@@ -19,6 +19,9 @@ import Achat from "@/components/Achat/Achat.vue";
 import CreateAchat from "@/components/Achat/CreateAchat.vue";
 import EditAchat from "@/components/Achat/EditAchat.vue";
 
+// DataTable
+import DataTable from "@/components/DataTable/DataTable.vue";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -95,6 +98,13 @@ const router = createRouter({
             path: '/achat/show/:id/edit',
             name: 'edit-achat',
             component: EditAchat
+        },
+
+        // DataTable
+        {
+            path: '/data_table',
+            name: 'data_table',
+            component: DataTable
         },
     ],
 });

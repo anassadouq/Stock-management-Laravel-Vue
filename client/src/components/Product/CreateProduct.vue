@@ -62,7 +62,8 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <select v-model="form.fournisseur_id" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
+                        <select v-model="form.fournisseur_id" 
+                                class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
                             <option value="" disabled selected>Choisissez un fournisseur</option>
                             <option v-for="fournisseur in fournisseurs" :key="fournisseur.id" :value="fournisseur.id">
                                 {{ fournisseur.nom }}
@@ -72,22 +73,34 @@
                     
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Code</label>
-                        <input type="text" v-model="form.code" placeholder="Code" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" 
+                               v-model="form.code" 
+                               placeholder="Code" 
+                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Désignation</label>
-                        <input type="text" v-model="form.designation" placeholder="Désignation" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" 
+                               v-model="form.designation" 
+                               placeholder="Désignation" 
+                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" v-model="form.qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" 
+                               v-model="form.qte" 
+                               placeholder="Quantité" 
+                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Prix Unitaire</label>
-                        <input type="number" v-model="form.pu" placeholder="Prix Unitaire" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" 
+                               v-model="form.pu" 
+                               placeholder="Prix Unitaire" 
+                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>

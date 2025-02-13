@@ -1,17 +1,10 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import axios from 'axios';
-    import { useRoute, useRouter } from 'vue-router';
+    import SearchForm from '../DataTable/SearchForm.vue';
 
     const fournisseurs = ref([]);
-    const errorMessage = ref('');
-    const route = useRoute();
-    const router = useRouter();
-    import { useToast } from 'vue-toastification';
-
-    const toast = useToast();
-
-    const fournisseurId = route.params.id;
+    const searchFilter = ref('');
 
     const fetchFournisseurs = async () => {
         try {
@@ -19,11 +12,27 @@
             fournisseurs.value = response.data;
         } catch (error) {
             console.error('Erreur lors du chargement des fournisseurs', error);
-            errorMessage.value = 'Impossible de charger les fournisseurs.';
-
         }
     };
 
+    // Computed property for filtering the items
+    const filteredItems = computed(() => {
+        if (searchFilter.value) {
+            return fournisseurs.value.filter(item => 
+                item.nom.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+                item.adresse.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+                item.tel.toLowerCase().includes(searchFilter.value.toLowerCase())
+            );
+        }
+        return fournisseurs.value;
+    });
+
+    // Handle search from child component
+    const handleSearch = (search) => {
+        searchFilter.value = search;
+    };
+
+    
     const deleteFournisseur = async (id) => {
         try {
             const confirmDelete = window.confirm('Are you sure you want to delete this fournisseur?');
@@ -43,31 +52,30 @@
 </script>
 
 <template>
-    <RouterLink to="/fournisseur/create">Add</RouterLink>
-    <section>
-        <div>
-            <h2>Liste des Fournisseurs</h2>
-            <table width="100%" style="text-align: center">
-                <thead>
-                    <tr>
-                        <th>Nom</th>
-                        <th>Adresse</th>
-                        <th>Téléphone</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="fournisseur in fournisseurs" :key="fournisseur.id">
-                        <td>{{ fournisseur.nom }}</td>
-                        <td>{{ fournisseur.adresse }}</td>
-                        <td>{{ fournisseur.tel }}</td>
-                        <td>
-                            <RouterLink :to="`/fournisseur/edit/${fournisseur.id}`">Edit</RouterLink>
-                            <button @click="deleteFournisseur(fournisseur.id)" >Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+    <div>
+        <RouterLink to="/fournisseur/create">Add</RouterLink><br><br>
+
+        <SearchForm @search="handleSearch" />
+        <table width="100%" style="text-align: center">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Adresse</th>
+                    <th>Téléphone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="fournisseur in filteredItems" :key="fournisseur.id">
+                    <td>{{ fournisseur.nom }}</td>
+                    <td>{{ fournisseur.adresse }}</td>
+                    <td>{{ fournisseur.tel }}</td>
+                    <td>
+                        <RouterLink :to="`/fournisseur/edit/${fournisseur.id}`">Edit</RouterLink>
+                        <button @click="deleteFournisseur(fournisseur.id)" >Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>

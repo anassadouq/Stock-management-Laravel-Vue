@@ -19,10 +19,10 @@ class AchatService
     }
 
     public function saveAchat($data)
-    {
+    {    
         return $this->achatInterface->saveAchat($data);
     }
-
+    
     public function updateAchat($achat, $data)
     {
         return $this->achatInterface->updateAchat($achat, $data);

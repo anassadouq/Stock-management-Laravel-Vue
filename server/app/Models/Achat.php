@@ -24,4 +24,19 @@ class Achat extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($achat) {
+            $product = Product::find($achat->product_id);
+            if ($product && $product->qte >= $achat->qte) {
+                $product->qte -= $achat->qte;
+                $product->save();
+            } else {
+                throw new \Exception("Quantité insuffisante pour cet achat.");
+            }
+        });
+    }
 }

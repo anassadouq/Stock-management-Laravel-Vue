@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Achat;
 use App\Models\Client;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Services\AchatService;
 
@@ -24,8 +25,8 @@ class AchatController extends Controller
     public function store(Request $request)
     {
         $achat = $this->achatService->saveAchat($request->all());
-        return response()->json($achat);
-    }
+        return response()->json(['message' => 'Achat effectué avec succès', 'achat' => $achat]);
+    }    
 
     public function show($client_id)
     {
