@@ -60,13 +60,15 @@
 </script>
 
 <template>
-    <section>
-        <div>
-            <div>
+    <section class="bg-green-50">
+        <div class="container m-auto max-w-2xl py-5">
+            <div class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
                 <form @submit.prevent="handleUpdate">
+                    <h2 class="text-3xl text-center font-semibold mb-6">Editer le produit</h2>
+
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <select v-model="form.fournisseur_id" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
+                        <select v-model="form.fournisseur_id" class="border-gray-300 rounded-md shadow-sm focus:ring w-full px-4 py-2">
                             <option value="" disabled selected>Choisissez un fournisseur</option>
                             <option v-for="fournisseur in fournisseurs" :key="fournisseur.id" :value="fournisseur.id">
                                 {{ fournisseur.nom }}
@@ -75,27 +77,27 @@
                     </div>
 
                     <div>
-                        <label for="code">Code</label>
-                        <input type="text" v-model="form.code"/>
+                        <label class="block text-gray-700 font-bold mb-2">Code</label>
+                        <input type="text" v-model="form.code" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
-                        <label for="designation">Designation</label>
-                        <input type="text" v-model="form.designation"/>
+                        <label class="block text-gray-700 font-bold mb-2">Designation</label>
+                        <input type="text" v-model="form.designation" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
-                        <label for="qte">Quantity</label>
-                        <input type="number" v-model="form.qte"/>
+                        <label class="block text-gray-700 font-bold mb-2">Quantity</label>
+                        <input type="number" v-model="form.qte" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="block text-gray-700 font-bold mb-2">
                         <label for="pu">Price</label>
-                        <input type="number" step="0.01" v-model="form.pu"/>
+                        <input type="number" step="0.01" v-model="form.pu" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div>
-                        <button type="submit">Edit</button>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"><i class="pi pi-pencil"></i> Editer</button>
                     </div>
                 </form>
             </div>

@@ -99,7 +99,6 @@ const router = createRouter({
             name: 'edit-achat',
             component: EditAchat
         },
-
     ],
 });
 

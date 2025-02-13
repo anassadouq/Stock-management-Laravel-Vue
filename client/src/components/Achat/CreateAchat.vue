@@ -40,7 +40,7 @@
             router.push(`/achat/show/${form.client_id}`);
         } catch (error) {
             console.error('Erreur lors de l\'ajout de l\'achat', error);
-            errorMessage.value = 'Impossible d\'ajouter l\'achat. Vérifiez les informations.';
+            errorMessage.value = 'Stock insuffisant';
             toast.error('L\'achat n\'a pas été ajouté');
         }
     };
@@ -58,7 +58,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Produit</label>
-                        <select v-model="form.product_id" name="product_id" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
+                        <select v-model="form.product_id" name="product_id" class="border-gray-300 rounded-md shadow-sm focus:ring w-full px-4 py-2">
                             <option value="" disabled>Choisissez un produit</option>
                             <option v-for="product in products" :key="product.id" :value="product.id">
                                 {{ product.designation }} - {{ product.pu }} DH
@@ -74,7 +74,7 @@
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>
 
                     <div>
-                        <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline" type="submit">
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline" type="submit">
                             Ajouter
                         </button>
                     </div>

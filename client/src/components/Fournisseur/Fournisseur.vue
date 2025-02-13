@@ -53,26 +53,33 @@
 
 <template>
     <div>
-        <RouterLink to="/fournisseur/create">Add</RouterLink><br><br>
+        <RouterLink to="/fournisseur/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+            <i class="pi pi-plus-circle"></i>
+        </RouterLink><br><br>
 
-        <SearchForm @search="handleSearch" />
-        <table width="100%" style="text-align: center">
-            <thead>
+        <SearchForm @search="handleSearch"/>
+        <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th>Nom</th>
-                    <th>Adresse</th>
-                    <th>Téléphone</th>
-                    <th>Action</th>
+                    <th scope="col" class="px-6 py-3">Nom</th>
+                    <th scope="col" class="px-6 py-3">Adresse</th>
+                    <th scope="col" class="px-6 py-3">Téléphone</th>
+                    <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="fournisseur in filteredItems" :key="fournisseur.id">
-                    <td>{{ fournisseur.nom }}</td>
-                    <td>{{ fournisseur.adresse }}</td>
-                    <td>{{ fournisseur.tel }}</td>
-                    <td>
-                        <RouterLink :to="`/fournisseur/edit/${fournisseur.id}`">Edit</RouterLink>
-                        <button @click="deleteFournisseur(fournisseur.id)" >Delete</button>
+                <tr v-for="fournisseur in filteredItems" :key="fournisseur.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <td class="px-6 py-4">{{ fournisseur.nom }}</td>
+                    <td class="px-6 py-4">{{ fournisseur.adresse }}</td>
+                    <td class="px-6 py-4">{{ fournisseur.tel }}</td>
+                    <td class="px-6 py-4">
+                        <RouterLink :to="`/fournisseur/edit/${fournisseur.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                            <i class="pi pi-pencil"></i>
+                        </RouterLink>
+
+                        <button @click="deleteFournisseur(fournisseur.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <i class="pi pi-trash"></i>
+                        </button>
                     </td>
                 </tr>
             </tbody>

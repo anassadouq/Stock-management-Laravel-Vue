@@ -56,30 +56,38 @@ onMounted(fetchClients);
 </script>
 
 <template>
-    <RouterLink to="/client/create">Add</RouterLink><br><br>
     
     <section>
         <div>
+            <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+                <i class="pi pi-plus-circle"></i>
+            </RouterLink><br><br>
+
             <SearchForm @search="handleSearch"/>
-            <h2>Liste des produits</h2>
-            <table width="100%" style="text-align: center">
-                <thead>
+            <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th>Nom</th>
-                        <th>Adresse</th>
-                        <th>Téléphone</th>
-                        <th>Actions</th>
+                        <th scope="col" class="px-6 py-3">Nom</th>
+                        <th scope="col" class="px-6 py-3">Adresse</th>
+                        <th scope="col" class="px-6 py-3">Téléphone</th>
+                        <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="client in filteredClients" :key="client.id">
-                        <td>{{ client.nom }}</td>
-                        <td>{{ client.adresse}}</td>
-                        <td>{{ client.tel }}</td>
-                        <td>
-                            <RouterLink :to="`/achat/show/${client.id}`">Show</RouterLink>
-                            <RouterLink :to="`/client/edit/${client.id}`">Edit</RouterLink>
-                            <button @click="deleteClient(client.id)">Delete</button>
+                    <tr v-for="client in filteredClients" :key="client.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <td class="px-6 py-4">{{ client.nom }}</td>
+                        <td class="px-6 py-4">{{ client.adresse}}</td>
+                        <td class="px-6 py-4">{{ client.tel }}</td>
+                        <td class="px-6 py-4">
+                            <RouterLink :to="`/achat/show/${client.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
+                                <i class="pi pi-eye"></i>
+                            </RouterLink>
+                            <RouterLink :to="`/client/edit/${client.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                                <i class="pi pi-pencil"></i>
+                            </RouterLink>
+                            <button @click="deleteClient(client.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                                <i class="pi pi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

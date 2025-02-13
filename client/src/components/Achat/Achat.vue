@@ -41,28 +41,32 @@
 </script>
 
 <template>
-    <RouterLink :to="`/achat/show/${client_id}/create`">Add</RouterLink>
+    <RouterLink :to="`/achat/show/${client_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+        <i class="pi pi-plus-circle"></i>
+    </RouterLink><br><br>
+
     <section>
         <div>
-            <h2>Liste des achats</h2>
-            <table width="100%" style="text-align: center">
-                <thead>
+            <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th>Produit</th>
-                        <th>Prix Unitaire</th>
-                        <th>Quantité</th>
-                        <th>Total</th>
-                        <th>Actions</th>
+                        <th scope="col" class="px-6 py-3">Produit</th>
+                        <th scope="col" class="px-6 py-3">Prix Unitaire</th>
+                        <th scope="col" class="px-6 py-3">Quantité</th>
+                        <th scope="col" class="px-6 py-3">Total</th>
+                        <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="achat in achats" :key="achat.id">
-                        <td>{{ achat.product.designation }}</td>
-                        <td>{{ achat.product.pu + ' DH' }}</td>
-                        <td>{{ achat.qte }}</td>
-                        <td>{{ achat.qte * achat.product.pu + ' DH' }}</td>
-                        <td>
-                            <button @click="deleteAchat(achat.id)">Delete</button>
+                    <tr v-for="achat in achats" :key="achat.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <td class="px-6 py-4">{{ achat.product.designation }}</td>
+                        <td class="px-6 py-4">{{ achat.product.pu + ' DH' }}</td>
+                        <td class="px-6 py-4">{{ achat.qte }}</td>
+                        <td class="px-6 py-4">{{ achat.qte * achat.product.pu + ' DH' }}</td>
+                        <td class="px-6 py-4">
+                            <button @click="deleteAchat(achat.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                                <i class="pi pi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
