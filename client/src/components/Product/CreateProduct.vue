@@ -3,11 +3,12 @@
     import router from '@/router';
     import axios from 'axios';
     import { useToast } from 'vue-toastification';
+    import VueMultiselect from 'vue-multiselect'; // Import the multi-select component
 
     const toast = useToast();
 
     const form = reactive({
-        fournisseur_id: '',
+        fournisseur_id: null, // This will store a single selected fournisseur object
         code: '',
         designation: '',
         qte: '',
@@ -32,8 +33,11 @@
 
     // Handle form submission
     const handleSubmit = async () => {
-        const newproduct = {
-            fournisseur_id: form.fournisseur_id,
+        // Extract the ID from the selected fournisseur
+        const selectedFournisseurId = form.fournisseur_id ? form.fournisseur_id.id : null;
+
+        const newProduct = {
+            fournisseur_id: selectedFournisseurId, // Send only the ID
             code: form.code,
             designation: form.designation,
             qte: form.qte,
@@ -41,7 +45,7 @@
         };
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/product', newproduct);
+            const response = await axios.post('http://127.0.0.1:8000/api/product', newProduct);
             toast.success('Product added successfully');
             router.push('/product');
         } catch (error) {
@@ -52,7 +56,6 @@
     };
 </script>
 
-
 <template>
     <section class="bg-green-50">
         <div class="container m-auto max-w-2xl py-5">
@@ -62,45 +65,35 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <select v-model="form.fournisseur_id" 
-                                class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2">
-                            <option value="" disabled selected>Choisissez un fournisseur</option>
-                            <option v-for="fournisseur in fournisseurs" :key="fournisseur.id" :value="fournisseur.id">
-                                {{ fournisseur.nom }}
-                            </option>
-                        </select>
+                        <vue-multiselect
+                            v-model="form.fournisseur_id" 
+                            :options="fournisseurs" 
+                            :searchable="true"
+                            track-by="id"
+                            label="nom"
+                            placeholder="Choisissez un fournisseur"
+                            class="w-full"
+                        />
                     </div>
-                    
+
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Code</label>
-                        <input type="text" 
-                               v-model="form.code" 
-                               placeholder="Code" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.code" placeholder="Code" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Désignation</label>
-                        <input type="text" 
-                               v-model="form.designation" 
-                               placeholder="Désignation" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.designation" placeholder="Désignation" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" 
-                               v-model="form.qte" 
-                               placeholder="Quantité" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" v-model="form.qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Prix Unitaire</label>
-                        <input type="number" 
-                               v-model="form.pu" 
-                               placeholder="Prix Unitaire" 
-                               class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="number" v-model="form.pu" placeholder="Prix Unitaire" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
                     <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>
@@ -115,3 +108,5 @@
         </div>
     </section>
 </template>
+
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
