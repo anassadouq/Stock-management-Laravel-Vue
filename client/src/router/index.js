@@ -100,12 +100,6 @@ const router = createRouter({
             component: EditAchat
         },
 
-        // DataTable
-        {
-            path: '/data_table',
-            name: 'data_table',
-            component: DataTable
-        },
     ],
 });
 
