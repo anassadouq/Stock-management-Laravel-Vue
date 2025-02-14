@@ -1,30 +1,28 @@
 <script setup>
-    import { ref, onMounted, computed } from 'vue';
+    import { ref, computed } from 'vue';
+    import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
 
-    const fournisseurs = ref([]);
+    const queryClient = useQueryClient();
     const searchFilter = ref('');
 
-    const fetchFournisseurs = async () => {
-        try {
+    // Fetch fournisseurs
+    const { data: fournisseurs, error } = useQuery({
+        queryKey: ['fournisseurs'],
+        queryFn: async () => {
             const response = await axios.get('http://127.0.0.1:8000/api/fournisseur');
-            fournisseurs.value = response.data;
-        } catch (error) {
-            console.error('Erreur lors du chargement des fournisseurs', error);
-        }
-    };
+            return response.data;
+        },
+    });
 
-    // Computed property for filtering the items
+    // Computed property for filtering items
     const filteredItems = computed(() => {
-        if (searchFilter.value) {
-            return fournisseurs.value.filter(item => 
-                item.nom.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-                item.adresse.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-                item.tel.toLowerCase().includes(searchFilter.value.toLowerCase())
-            );
-        }
-        return fournisseurs.value;
+        return (fournisseurs.value || []).filter(item => 
+            item.nom.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+            item.adresse.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+            item.tel.toLowerCase().includes(searchFilter.value.toLowerCase())
+        );
     });
 
     // Handle search from child component
@@ -32,23 +30,28 @@
         searchFilter.value = search;
     };
 
-    
-    const deleteFournisseur = async (id) => {
-        try {
-            const confirmDelete = window.confirm('Are you sure you want to delete this fournisseur?');
-            if (confirmDelete) {
-                await axios.delete(`http://127.0.0.1:8000/api/fournisseur/${id}`);
-                fetchFournisseurs();
-                toast.success('Fournisseur deleted successfully');
-            }
-        } catch (error) {
-            console.error('Error deleting Fournisseur', error);
+    // Delete fournisseur mutation
+    const deleteFournisseur = useMutation({
+        mutationFn: async (id) => {
+            await axios.delete(`http://127.0.0.1:8000/api/fournisseur/${id}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['fournisseurs'] });
+            // Assuming you have a toast library setup
+            toast.success('Fournisseur deleted successfully');
+        },
+        onError: (error) => {
+            console.error('Error deleting fournisseur', error);
             toast.error('Fournisseur was not deleted');
+        },
+    });
 
+    // Confirm and delete
+    const confirmAndDeleteFournisseur = (id) => {
+        if (window.confirm('Are you sure you want to delete this fournisseur?')) {
+            deleteFournisseur.mutate(id);
         }
     };
-
-    onMounted(fetchFournisseurs);
 </script>
 
 <template>
@@ -57,7 +60,8 @@
             <i class="pi pi-plus-circle"></i>
         </RouterLink><br><br>
 
-        <SearchForm @search="handleSearch"/>
+        <SearchForm @search="handleSearch" />
+
         <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -77,7 +81,7 @@
                             <i class="pi pi-pencil"></i>
                         </RouterLink>
 
-                        <button @click="deleteFournisseur(fournisseur.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                        <button @click="confirmAndDeleteFournisseur(fournisseur.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                             <i class="pi pi-trash"></i>
                         </button>
                     </td>

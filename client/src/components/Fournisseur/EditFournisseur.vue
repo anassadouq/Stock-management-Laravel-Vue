@@ -1,6 +1,7 @@
 <script setup>
-    import { reactive, onMounted } from 'vue';
+    import { reactive, watch } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
+    import { useQuery, useMutation } from '@tanstack/vue-query';
     import axios from 'axios';
     import { useToast } from 'vue-toastification';
 
@@ -8,7 +9,7 @@
     const router = useRouter();
     const toast = useToast();
 
-    const fournisseurId = route.params.id;
+    const id = route.params.id;
 
     const form = reactive({
         nom: '',
@@ -16,38 +17,51 @@
         tel: '',
     });
 
-    const handleUpdate = async () => {
-        const updateFournisseur = {
+    // Fetch fournisseur data using TanStack Query
+    const { data, error } = useQuery({
+        queryKey: ['fournisseur', id],
+        queryFn: async () => {
+            const response = await axios.get(`http://127.0.0.1:8000/api/fournisseur/${id}`);
+            return response.data.fournisseur;
+        },
+        onError: () => {
+            toast.error('Failed to fetch fournisseur details.');
+        },
+    });
+
+    // Update form when data is fetched
+    watch(data, (newData) => {
+        if (newData && newData.nom) {
+            form.nom = newData.nom;
+            form.adresse = newData.adresse;
+            form.tel = newData.tel;
+        }
+    });
+
+    // Mutation to update fournisseur
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const updateFournisseur = {
             nom: form.nom,
             adresse: form.adresse,
             tel: form.tel,
-        };
-
-        try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/fournisseur/${fournisseurId}`, updateFournisseur);
+            };
+            await axios.put(`http://127.0.0.1:8000/api/fournisseur/${id}`, updateFournisseur);
+        },
+        onSuccess: () => {
             toast.success('Fournisseur updated successfully');
-            router.push(`/fournisseur`);
-        } catch (error) {
-            console.error('Error updating fournisseur', error);
-            toast.error('Fournisseur was not updated');
-        }
-    };
-
-    onMounted(async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/fournisseur/${fournisseurId}`);
-            const fournisseur = response.data.fournisseur;
-
-            // Populate the form with the fetched fournisseur data
-            form.nom = fournisseur.nom;
-            form.adresse = fournisseur.adresse;
-            form.tel = fournisseur.tel;
-        } catch (error) {
-            console.error('Error fetching fournisseur', error);
-            toast.error('Failed to fetch fournisseur details.');
-        }
+            router.push('/fournisseur');
+        },
+        onError: (err) => {
+            toast.error(err?.response?.data?.message || 'Fournisseur was not updated');
+        },
     });
+
+    const handleUpdate = () => {
+        mutation.mutate();
+    };
 </script>
+
 
 <template>
     <section class="bg-green-50">
@@ -55,21 +69,28 @@
             <div class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
                 <form @submit.prevent="handleUpdate">
                     <h2 class="text-3xl text-center font-semibold mb-6">Editer un Fournisseur</h2>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Nom</label>
-                        <input type="text" v-model="form.nom" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Adresse</label>
-                        <input type="text" v-model="form.adresse" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Tel</label>
-                        <input type="text" v-model="form.tel" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
-                    </div>
 
                     <div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"><i class="pi pi-pencil"></i> Editer</button>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Nom</label>
+                            <input type="text" v-model="form.nom" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Adresse</label>
+                            <input type="text" v-model="form.adresse"class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-bold mb-2">Tel</label>
+                            <input type="text" v-model="form.tel" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline">
+                                <i class="pi pi-pencil"></i> Editer
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
