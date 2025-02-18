@@ -20,8 +20,8 @@
             router.push('/fournisseur');
         },
         onError: (error) => {
-            console.error('Erreur lors de l\'ajout du person', error);
-            errorMessage.value = "Impossible d'ajouter le person. Veuillez vérifier les informations.";
+            console.error('Erreur lors de l\'ajout du fournisseur', error);
+            errorMessage.value = "Impossible d'ajouter le fournisseur. Veuillez vérifier les informations.";
         },
     });
 
@@ -29,6 +29,7 @@
         mutation.mutate({ ...form }); // ...form  passer une copie des données du formulaire
     };
 </script>
+
 
 <template>
     <section class="bg-green-50">

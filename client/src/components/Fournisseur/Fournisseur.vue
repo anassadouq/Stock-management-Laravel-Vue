@@ -8,7 +8,7 @@
     const searchFilter = ref('');
 
     // Fetch fournisseurs
-    const { data: fournisseurs, error } = useQuery({
+    const { data: fournisseurs } = useQuery({
         queryKey: ['fournisseurs'],
         queryFn: async () => {
             const response = await axios.get('http://127.0.0.1:8000/api/fournisseur');
@@ -53,6 +53,7 @@
         }
     };
 </script>
+
 
 <template>
     <div>

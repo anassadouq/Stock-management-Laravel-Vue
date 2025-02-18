@@ -1,58 +1,54 @@
 <script setup>
-    import { reactive, ref, onMounted } from 'vue';
-    import { useRoute, useRouter } from 'vue-router'; // Import useRoute and useRouter
+    import { reactive, ref } from 'vue';
+    import { useRoute, useRouter } from 'vue-router';
     import axios from 'axios';
     import { useToast } from 'vue-toastification';
     import VueMultiselect from 'vue-multiselect';
+    import { useQuery, useMutation } from '@tanstack/vue-query';
 
     const toast = useToast();
-    const route = useRoute(); // Get the current route
-    const router = useRouter(); // Get the router instance
+    const route = useRoute();
+    const router = useRouter();
 
     const form = reactive({
-        client_id: route.params.client_id, // Get client_id from the route params
-        product_id: null, // This will store a single selected product object
+        client_id: route.params.client_id,
+        product_id: null,
         qte: '',
     });
 
-    const products = ref([]); // Store products
-    const errorMessage = ref('');
-
-    // Fetch products from API
     const fetchProducts = async () => {
-        try {
-            const response = await axios.get('http://127.0.0.1:8000/api/product');
-            products.value = response.data; // Assuming API returns an array of products
-        } catch (error) {
-            console.error('Erreur lors du chargement des produits', error);
-        }
+        const { data } = await axios.get('http://127.0.0.1:8000/api/product');
+        return data;
     };
 
-    // Fetch products when component is mounted
-    onMounted(fetchProducts);
+    const { data: products, error } = useQuery({
+        queryKey: ['products'],
+        queryFn: fetchProducts,
+    });
 
-    // Handle form submission
-    const handleSubmit = async () => {
-        // Extract the ID from the selected product
-        const selectedProductId = form.product_id ? form.product_id.id : null;
-
-        const newProduct = {
-            client_id: form.client_id, // Include client_id in the request
-            product_id: selectedProductId, // Send only the ID
-            qte: form.qte,
-        };
-
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/api/achat', newProduct);
+    const addAchatMutation = useMutation({
+        mutationFn: async (newProduct) => {
+            await axios.post('http://127.0.0.1:8000/api/achat', newProduct);
+        },
+        onSuccess: () => {
             toast.success('Achat ajouté avec succès');
-            router.push(`/achat/show/${form.client_id}`); // Navigate to the correct client_id
-        } catch (error) {
-            console.error('Erreur lors de l\'ajout de l\'achat', error);
-            errorMessage.value = 'Impossible d\'ajouter l\'achat. Veuillez vérifier les informations.';
-            toast.error('L\'achat n\'a pas été ajouté');
+            router.push(`/achat/show/${form.client_id}`);
+        },
+        onError: () => {
+            toast.error("L'achat n'a pas été ajouté");
         }
+    });
+
+    const handleSubmit = () => {
+        const selectedProductId = form.product_id ? form.product_id.id : null;
+        addAchatMutation.mutate({
+            client_id: form.client_id,
+            product_id: selectedProductId,
+            qte: form.qte,
+        });
     };
 </script>
+
 
 <template>
     <section class="bg-green-50">
@@ -79,7 +75,7 @@
                         <input type="number" v-model="form.qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
                     </div>
 
-                    <div v-if="errorMessage" class="text-red-500 text-sm mt-1 mb-4">{{ errorMessage }}</div>
+                    <div v-if="error" class="text-red-500 text-sm mt-1 mb-4">Impossible de charger les produits.</div>
 
                     <div>
                         <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline" type="submit">

@@ -1,44 +1,46 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
     import { useRoute, useRouter } from 'vue-router';
-
-    const achats = ref([]);
-    const errorMessage = ref('');
-    const route = useRoute();
-    const router = useRouter();
     import { useToast } from 'vue-toastification';
 
-    const client_id = route.params.client_id;
+    const route = useRoute();
+    const router = useRouter();
     const toast = useToast();
+    const queryClient = useQueryClient();
 
-    const fetchAchat = async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/achat/show/${client_id}`);
-            achats.value = response.data.achats;
-        } catch (error) {
-            console.error('Erreur lors du chargement des achats', error);
-            errorMessage.value = 'Impossible de charger les achats.';
-        }
+    const client_id = route.params.client_id;
+
+    const fetchAchats = async () => {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/achat/show/${client_id}`);
+        return data.achats;
     };
 
-    const deleteAchat = async (id) => {
-        try {
-            const confirmDelete = window.confirm('Are you sure you want to delete this achat?');
-            if (confirmDelete) {
-                await axios.delete(`http://127.0.0.1:8000/api/achat/${id}`);
-                fetchAchat();
-                toast.success('achat deleted successfully');
-            }
-        } catch (error) {
-            console.error('Error deleting achat', error);
-            toast.error('achat was not deleted');
+    const { data: achats, error } = useQuery({
+        queryKey: ['achats', client_id],
+        queryFn: fetchAchats
+    });
 
+    const deleteAchatMutation = useMutation({
+        mutationFn: async (id) => {
+            await axios.delete(`http://127.0.0.1:8000/api/achat/${id}`);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(['achats', client_id]);
+            toast.success('Achat deleted successfully');
+        },
+        onError: () => {
+            toast.error('Achat was not deleted');
+        }
+    });
+
+    const deleteAchat = (id) => {
+        if (window.confirm('Are you sure you want to delete this achat?')) {
+            deleteAchatMutation.mutate(id);
         }
     };
-
-    onMounted(fetchAchat);
 </script>
+
 
 <template>
     <RouterLink :to="`/achat/show/${client_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
@@ -46,7 +48,8 @@
     </RouterLink><br><br>
 
     <section>
-        <div>
+        <div v-if="error">Impossible de charger les achats.</div>
+        <div v-else>
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>

@@ -42,9 +42,9 @@
     const mutation = useMutation({
         mutationFn: async () => {
             const updateFournisseur = {
-            nom: form.nom,
-            adresse: form.adresse,
-            tel: form.tel,
+                nom: form.nom,
+                adresse: form.adresse,
+                tel: form.tel,
             };
             await axios.put(`http://127.0.0.1:8000/api/fournisseur/${id}`, updateFournisseur);
         },
