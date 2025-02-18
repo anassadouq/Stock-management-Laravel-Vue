@@ -1,6 +1,7 @@
 <script setup>
-    import { reactive, onMounted } from 'vue';
+    import { reactive, watch } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
+    import { useQuery, useMutation } from '@tanstack/vue-query';
     import axios from 'axios';
     import { useToast } from 'vue-toastification';
 
@@ -8,7 +9,7 @@
     const router = useRouter();
     const toast = useToast();
 
-    const clientId = route.params.id;
+    const id = route.params.id;
 
     const form = reactive({
         nom: '',
@@ -16,37 +17,49 @@
         tel: '',
     });
 
-    const handleUpdate = async () => {
-        const updateclient = {
+    // Fetch client data using TanStack Query
+    const { data, error } = useQuery({
+        queryKey: ['client', id],
+        queryFn: async () => {
+            const response = await axios.get(`http://127.0.0.1:8000/api/client/${id}`);
+            return response.data.client;
+        },
+        onError: () => {
+            toast.error('Failed to fetch client details.');
+        },
+    });
+
+    // Update form when data is fetched
+    watch(data, (newData) => {
+        if (newData && newData.nom) {
+            form.nom = newData.nom;
+            form.adresse = newData.adresse;
+            form.tel = newData.tel;
+        }
+    });
+
+    // Mutation to update client
+    const mutation = useMutation({
+        mutationFn: async () => {
+            const updateClient = {
             nom: form.nom,
             adresse: form.adresse,
             tel: form.tel,
-        };
-
-        try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/client/${clientId}`, updateclient);
+            };
+            await axios.put(`http://127.0.0.1:8000/api/client/${id}`, updateClient);
+        },
+        onSuccess: () => {
             toast.success('client updated successfully');
-            router.push(`/client`);
-        } catch (error) {
-            console.error('Error updating client', error);
-            toast.error('client was not updated');
-        }
-    };
-
-    onMounted(async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/client/${clientId}`);
-            const client = response.data.client;
-
-            // Populate the form with the fetched client data
-            form.nom = client.nom;
-            form.adresse = client.adresse;
-            form.tel = client.tel;
-        } catch (error) {
-            console.error('Error fetching client', error);
-            toast.error('Failed to fetch client details.');
-        }
+            router.push('/client');
+        },
+        onError: (err) => {
+            toast.error(err?.response?.data?.message || 'client was not updated');
+        },
     });
+
+    const handleUpdate = () => {
+        mutation.mutate();
+    };
 </script>
 
 <template>

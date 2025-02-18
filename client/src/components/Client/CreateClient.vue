@@ -1,10 +1,8 @@
 <script setup>
     import { reactive, ref } from 'vue';
+    import { useMutation } from '@tanstack/vue-query';
     import router from '@/router';
     import axios from 'axios';
-    import { useToast } from 'vue-toastification';
-
-    const toast = useToast();
 
     const form = reactive({
         nom: '',
@@ -14,22 +12,21 @@
 
     const errorMessage = ref('');
 
-    const handleSubmit = async () => {
-        const newClient = {
-            nom: form.nom,
-            adresse: form.adresse,
-            tel: form.tel,
-        };
-
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/api/client', newClient);
-            toast.success('client added successfully');
+    const mutation = useMutation({
+        mutationFn: async (newClient) => {  // mutationFn fonction qui envoie une requête POST pour ajouter une nouvelle personne via axios.post
+            return await axios.post('http://127.0.0.1:8000/api/client', newClient);
+        },
+        onSuccess: () => {
             router.push('/client');
-        } catch (error) {
-            console.error('Erreur lors de l\'ajout du client', error);
-            errorMessage.value = 'Impossible d\'ajouter le client. Veuillez vérifier les informations.';
-            toast.error('client was not added');
-        }
+        },
+        onError: (error) => {
+            console.error('Erreur lors de l\'ajout du person', error);
+            errorMessage.value = "Impossible d'ajouter le person. Veuillez vérifier les informations.";
+        },
+    });
+
+    const handleSubmit = () => {
+        mutation.mutate({ ...form }); // ...form  passer une copie des données du formulaire
     };
 </script>
 

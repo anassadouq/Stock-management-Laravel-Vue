@@ -108,5 +108,3 @@
         </div>
     </section>
 </template>
-
-<style src="vue-multiselect/dist/vue-multiselect.css"></style>
