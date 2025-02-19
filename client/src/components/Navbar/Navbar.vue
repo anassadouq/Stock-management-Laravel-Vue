@@ -1,29 +1,54 @@
 <script setup>
-    import { RouterLink, useRoute } from 'vue-router';
+    import { ref, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
+
+    const isAuthenticated = ref(localStorage.getItem('authToken') !== null);
+
+    onMounted(() => {
+        isAuthenticated.value = localStorage.getItem('authToken') !== null;
+    });
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        isAuthenticated.value = false;
+        router.push('/login');
+    };
 </script>
 
 <template>
-    <nav class="bg-white border-gray-200 dark:bg-gray-900">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-            <RouterLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">LOGO</span>
-            </RouterLink>
-            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-                <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-                    <li>
-                        <RouterLink to="/" class="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/fournisseur" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Fournisseur</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/product" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Product</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/client" class="block py-2 px-3 text-gray-900 rounded-sm hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Client</RouterLink>
-                    </li>
-                </ul>
+    <nav class="bg-gray-800 text-white shadow-lg">
+        <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div>
+                <RouterLink to="/" class="text-xl font-bold hover:text-gray-300">Logo</RouterLink>
             </div>
+        
+            <ul class="flex items-center space-x-6">
+                <li>
+                    <RouterLink to="/" class="hover:text-gray-300 {{ $route.path === '/' ? 'text-blue-400' : '' }}">Fournisseur</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/product" class="hover:text-gray-300 {{ $route.path === '/product' ? 'text-blue-400' : '' }}">Product</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/client" class="hover:text-gray-300 {{ $route.path === '/client' ? 'text-blue-400' : '' }}">Client</RouterLink>
+                </li>
+  
+                <li v-if="!isAuthenticated">
+                    <RouterLink to="/login" class="hover:text-gray-300 {{ $route.path === '/login' ? 'text-blue-400' : '' }}">Login</RouterLink>
+                </li>
+
+                <li v-if="!isAuthenticated">
+                    <RouterLink to="/register" class="hover:text-gray-300 {{ $route.path === '/register' ? 'text-blue-400' : '' }}">Register</RouterLink>
+                </li>
+          
+                <li v-else>
+                    <button @click="handleLogout" class="bg-blue-500 text-white font-medium py-1 px-4 rounded-lg hover:bg-blue-600 transition duration-200">
+                        Logout
+                    </button>
+                </li>
+            </ul>
         </div>
     </nav>
 </template>

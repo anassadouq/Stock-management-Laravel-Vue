@@ -3,6 +3,7 @@
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
+    import Navbar from '../Navbar/Navbar.vue';
 
     const queryClient = useQueryClient();
     const searchFilter = ref('');
@@ -55,6 +56,7 @@
 
 
 <template>
+    <Navbar/><br>
     <section>
         <div>
             <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">

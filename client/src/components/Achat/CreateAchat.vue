@@ -5,6 +5,7 @@
     import { useToast } from 'vue-toastification';
     import VueMultiselect from 'vue-multiselect';
     import { useQuery, useMutation } from '@tanstack/vue-query';
+    import Navbar from '../Navbar/Navbar.vue';
 
     const toast = useToast();
     const route = useRoute();
@@ -51,8 +52,9 @@
 
 
 <template>
+    <Navbar/>
     <section class="bg-green-50">
-        <div class="container m-auto max-w-2xl py-5">
+        <div class="container m-auto max-w-2xl py-20">
             <div class="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
                 <form @submit.prevent="handleSubmit">
                     <h2 class="text-3xl text-center font-semibold mb-6">Ajouter un achat</h2>
