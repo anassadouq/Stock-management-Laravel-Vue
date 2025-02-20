@@ -26,7 +26,7 @@ class AchatController extends Controller
     {
         $achat = $this->achatService->saveAchat($request->all());
         return response()->json(['message' => 'Achat effectué avec succès', 'achat' => $achat]);
-    }    
+    }
 
     public function show($client_id)
     {

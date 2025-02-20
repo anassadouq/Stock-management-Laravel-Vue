@@ -4,6 +4,7 @@
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
     import Navbar from '../Navbar/Navbar.vue';
+    import jsPDF from 'jspdf';
 
     const queryClient = useQueryClient();
     const searchFilter = ref('');
@@ -52,6 +53,27 @@
             deleteClient.mutate(id);
         }
     };
+
+    // Download PDF function
+    const downloadPDF = () => {
+        const pdf = new jsPDF();
+        pdf.text('Client List', 10, 10);
+        let y = 20;
+        pdf.setFontSize(10);
+        pdf.text('Nom', 10, y);
+        pdf.text('Adresse', 70, y);
+        pdf.text('Téléphone', 130, y);
+        y += 10;
+        
+        filteredItems.value.forEach(f => {
+            pdf.text(f.nom, 10, y);
+            pdf.text(f.adresse, 70, y);
+            pdf.text(f.tel, 130, y);
+            y += 10;
+        });
+        
+        pdf.save('client.pdf');
+    };
 </script>
 
 
@@ -62,6 +84,12 @@
             <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
                 <i class="pi pi-plus-circle"></i>
             </RouterLink><br><br>
+
+            <div class="pdf">
+                <button class="text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg text-sm px-5 py-2.5 mx-1" @click="downloadPDF">
+                    <i class="pi pi-download"></i>
+                </button>
+            </div><br>
 
             <SearchForm @search="handleSearch"/>
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

@@ -4,6 +4,7 @@
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
     import Navbar from '../Navbar/Navbar.vue';
+    import jsPDF from 'jspdf';
 
     const queryClient = useQueryClient();
     const searchFilter = ref('');
@@ -53,6 +54,36 @@
             deleteProduct.mutate(id);
         }
     };
+
+    // Download PDF function
+    const downloadPDF = () => {
+        const pdf = new jsPDF();
+        pdf.text('Product List', 10, 10);
+        let y = 20;
+        pdf.setFontSize(10);
+
+        // Column titles with adjusted positions
+        pdf.text('Code', 10, y);
+        pdf.text('Fournisseur', 50, y);
+        pdf.text('Designation', 90, y);
+        pdf.text('Qte', 140, y);
+        pdf.text('PU', 170, y);
+
+        y += 10;
+        
+        filteredItems.value.forEach(f => {
+            // Data rows with adjusted positions
+            pdf.text(f.code, 10, y);
+            pdf.text(f.fournisseur?.nom, 50, y);
+            pdf.text(f.designation, 90, y);
+            pdf.text(f.qte.toString(), 140, y);
+            pdf.text(f.pu.toString(), 170, y);
+            y += 10;
+        });
+
+        pdf.save('product.pdf');
+    };
+
 </script>
 
 
@@ -63,6 +94,12 @@
             <RouterLink to="/product/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
                 <i class="pi pi-plus-circle"></i>
             </RouterLink><br><br>
+
+            <div class="pdf">
+                <button class="text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg text-sm px-5 py-2.5 mx-1" @click="downloadPDF">
+                    <i class="pi pi-download"></i>
+                </button>
+            </div><br>
 
             <SearchForm @search="handleSearch"/>
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

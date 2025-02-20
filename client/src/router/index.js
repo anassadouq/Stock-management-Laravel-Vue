@@ -23,9 +23,18 @@ import EditClient from "@/components/Client/EditClient.vue";
 import Achat from "@/components/Achat/Achat.vue";
 import CreateAchat from "@/components/Achat/CreateAchat.vue";
 
+import Test from "@/components/Test.vue";
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        {
+            path: '/test',
+            name: 'test',
+            component: Test,
+            meta: { requiresAuth: false } // Allow access without login
+        },
+
         {
             path: '/register',
             name: 'register',

@@ -26,21 +26,21 @@
         
             <ul class="flex items-center space-x-6">
                 <li>
-                    <RouterLink to="/" class="hover:text-gray-300 {{ $route.path === '/' ? 'text-blue-400' : '' }}">Fournisseur</RouterLink>
+                    <RouterLink to="/fournisseur" class="hover:text-gray-300">Fournisseur</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/product" class="hover:text-gray-300 {{ $route.path === '/product' ? 'text-blue-400' : '' }}">Product</RouterLink>
+                    <RouterLink to="/product" class="hover:text-gray-300">Product</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/client" class="hover:text-gray-300 {{ $route.path === '/client' ? 'text-blue-400' : '' }}">Client</RouterLink>
+                    <RouterLink to="/client" class="hover:text-gray-300">Client</RouterLink>
                 </li>
   
                 <li v-if="!isAuthenticated">
-                    <RouterLink to="/login" class="hover:text-gray-300 {{ $route.path === '/login' ? 'text-blue-400' : '' }}">Login</RouterLink>
+                    <RouterLink to="/login" class="hover:text-gray-300">Login</RouterLink>
                 </li>
 
                 <li v-if="!isAuthenticated">
-                    <RouterLink to="/register" class="hover:text-gray-300 {{ $route.path === '/register' ? 'text-blue-400' : '' }}">Register</RouterLink>
+                    <RouterLink to="/register" class="hover:text-gray-300">Register</RouterLink>
                 </li>
           
                 <li v-else>

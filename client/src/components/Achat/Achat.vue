@@ -66,6 +66,7 @@
                 <tbody>
                     <tr v-for="achat in achats" :key="achat.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">{{ achat.product.designation }}</td>
+                        {{achat.client_id.nom}}
                         <td class="px-6 py-4">{{ achat.product.pu + ' DH' }}</td>
                         <td class="px-6 py-4">{{ achat.qte }}</td>
                         <td class="px-6 py-4">{{ achat.qte * achat.product.pu + ' DH' }}</td>
