@@ -99,7 +99,7 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
-            path: '/product/show/:client_id/create',
+            path: '/product/show/:magasin_id/create',
             name: 'createProduct',
             component: CreateProduct,
             meta: { requiresAuth: true }

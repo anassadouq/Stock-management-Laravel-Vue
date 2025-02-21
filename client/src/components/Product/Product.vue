@@ -35,7 +35,7 @@
         }
     });
 
-    const deleteProduct = (id) => {
+    const confirmAndDeleteProduct = (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             deleteProductMutaion.mutate(id);
         }

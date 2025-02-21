@@ -52,7 +52,7 @@ const handleSubmit = async () => {
     try {
         await axios.post('http://127.0.0.1:8000/api/product', newProduct);
         toast.success('Produit ajouté avec succès');
-        router.push('/product');
+        router.push(`/product/show/${magasin_id.value}`);
     } catch (error) {
         console.error('Erreur lors de l\'ajout du produit', error);
         errorMessage.value = 'Impossible d\'ajouter le produit. Veuillez vérifier les informations.';
