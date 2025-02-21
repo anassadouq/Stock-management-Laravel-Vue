@@ -48,6 +48,9 @@
             form.designation = productData.value.designation;
             form.qte = productData.value.qte;
             form.pu = productData.value.pu;
+            form.stock_min = productData.value.stock_min;
+            form.min_sortie = productData.value.min_sortie;
+
             
             // Match the fournisseur object from the list using its ID
             form.fournisseur_id = fournisseurs.value.find(f => f.id === productData.value.fournisseur_id) || null;
@@ -74,6 +77,8 @@
             designation: form.designation,
             qte: form.qte,
             pu: form.pu,
+            stock_min: form.stock_min,
+            min_sortie: form.min_sortie,
         });
     };
 </script>
@@ -116,8 +121,18 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Price</label>
+                        <label class="block text-gray-700 font-bold mb-2">PU</label>
                         <input type="number" step="0.01" v-model="form.pu" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">stock_min</label>
+                        <input type="number" step="0.01" v-model="form.stock_min" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2">min_sortie</label>
+                        <input type="number" step="0.01" v-model="form.min_sortie" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 
                     <div>

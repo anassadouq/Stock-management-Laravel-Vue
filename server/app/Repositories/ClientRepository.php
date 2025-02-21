@@ -28,7 +28,6 @@ class ClientRepository implements ClientInterface
         return null; // Let the service/controller handle errors
     }
     
-
     // Delete Client
     public function deleteClient($client)
     {

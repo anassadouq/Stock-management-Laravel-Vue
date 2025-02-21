@@ -4,6 +4,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import Register from "@/components/Auth/Register.vue";
 import Login from "@/components/Auth/Login.vue";
 
+// Magasin
+import Magasin from "@/components/Magasin/Magasin.vue";
+import CreateMagasin from "@/components/Magasin/CreateMagasin.vue";
+import EditMagasin from "@/components/Magasin/EditMagasin.vue";
+
 // Fournisseur
 import Fournisseur from "@/components/Fournisseur/Fournisseur.vue";
 import CreateFournisseur from "@/components/Fournisseur/CreateFournisseur.vue";
@@ -23,18 +28,9 @@ import EditClient from "@/components/Client/EditClient.vue";
 import Achat from "@/components/Achat/Achat.vue";
 import CreateAchat from "@/components/Achat/CreateAchat.vue";
 
-import Test from "@/components/Test.vue";
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        {
-            path: '/test',
-            name: 'test',
-            component: Test,
-            meta: { requiresAuth: false } // Allow access without login
-        },
-
         {
             path: '/register',
             name: 'register',
@@ -52,6 +48,26 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: Fournisseur,
+            meta: { requiresAuth: true }
+        },
+
+        // Magasin
+        {
+            path: '/magasin',
+            name: 'magasin',
+            component: Magasin,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/magasin/create',
+            name: 'create_magasin',
+            component: CreateMagasin,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/magasin/edit/:id',
+            name: 'edit-magasin',
+            component: EditMagasin,
             meta: { requiresAuth: true }
         },
         
@@ -83,8 +99,8 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
-            path: '/product/create',
-            name: 'CreateProduct',
+            path: '/product/show/:client_id/create',
+            name: 'createProduct',
             component: CreateProduct,
             meta: { requiresAuth: true }
         },
@@ -92,6 +108,12 @@ const router = createRouter({
             path: '/product/edit/:id',
             name: 'edit-product',
             component: EditProduct,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/product/show/:magasin_id',
+            name: 'show-product',
+            component: Product,
             meta: { requiresAuth: true }
         },
 

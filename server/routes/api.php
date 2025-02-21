@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AchatController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\MagasinController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\FournisseurController;
 
@@ -13,12 +14,15 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
 
+// Magasin
+Route::resource('magasin', MagasinController::class);
+
 // Fournisseur
 Route::resource('fournisseur', FournisseurController::class);
 
 // Product
 Route::resource('product', ProductController::class);
-
+Route::get('product/show/{magasin_id}', [ProductController::class, 'show']);
 // Client
 Route::resource('client', ClientController::class);
 

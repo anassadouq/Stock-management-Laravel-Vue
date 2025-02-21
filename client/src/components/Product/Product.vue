@@ -1,123 +1,79 @@
 <script setup>
-    import { ref, computed } from 'vue';
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
-    import SearchForm from '../DataTable/SearchForm.vue';
+    import { useRoute, useRouter } from 'vue-router';
+    import { useToast } from 'vue-toastification';
     import Navbar from '../Navbar/Navbar.vue';
-    import jsPDF from 'jspdf';
 
+    const route = useRoute();
+    const router = useRouter();
+    const toast = useToast();
     const queryClient = useQueryClient();
-    const searchFilter = ref('');
 
-    // Fetch products
-    const { data: products, error } = useQuery({
-        queryKey: ['products'],
-        queryFn: async () => {
-            const response = await axios.get('http://127.0.0.1:8000/api/product');
-            return response.data;
-        },
-    });
+    const magasin_id = route.params.magasin_id;
 
-    // Computed property for filtering items
-    const filteredItems = computed(() => {
-        return (products.value || []).filter(item => 
-            item.code.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            item.designation.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            item.qte.toString().includes(searchFilter.value.toLowerCase()) ||
-            item.pu.toString().includes(searchFilter.value.toLowerCase())
-        );
-    });
-
-    // Handle search from child component
-    const handleSearch = (search) => {
-        searchFilter.value = search;
+    const fetchProducts = async () => {
+        const { data } = await axios.get(`http://127.0.0.1:8000/api/product/show/${magasin_id}`);
+        return data.products;
     };
 
-    // Delete product mutation
-    const deleteProduct = useMutation({
+    const { data: products, error } = useQuery({
+        queryKey: ['products', magasin_id],
+        queryFn: fetchProducts
+    });
+
+    const deleteProductMutaion = useMutation({
         mutationFn: async (id) => {
             await axios.delete(`http://127.0.0.1:8000/api/product/${id}`);
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['products'] });
+            queryClient.invalidateQueries(['products', magasin_id]);
             toast.success('product deleted successfully');
         },
-        onError: (error) => {
-            console.error('Error deleting product', error);
+        onError: () => {
             toast.error('product was not deleted');
-        },
+        }
     });
 
-    // Confirm and delete
-    const confirmAndDeleteProduct = (id) => {
+    const deleteProduct = (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
-            deleteProduct.mutate(id);
+            deleteProductMutaion.mutate(id);
         }
     };
-
-    // Download PDF function
-    const downloadPDF = () => {
-        const pdf = new jsPDF();
-        pdf.text('Product List', 10, 10);
-        let y = 20;
-        pdf.setFontSize(10);
-
-        // Column titles with adjusted positions
-        pdf.text('Code', 10, y);
-        pdf.text('Fournisseur', 50, y);
-        pdf.text('Designation', 90, y);
-        pdf.text('Qte', 140, y);
-        pdf.text('PU', 170, y);
-
-        y += 10;
-        
-        filteredItems.value.forEach(f => {
-            // Data rows with adjusted positions
-            pdf.text(f.code, 10, y);
-            pdf.text(f.fournisseur?.nom, 50, y);
-            pdf.text(f.designation, 90, y);
-            pdf.text(f.qte.toString(), 140, y);
-            pdf.text(f.pu.toString(), 170, y);
-            y += 10;
-        });
-
-        pdf.save('product.pdf');
-    };
-
 </script>
 
 
 <template>
     <Navbar/><br>
+
+    <RouterLink :to="`/product/show/${magasin_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+        <i class="pi pi-plus-circle"></i>
+    </RouterLink><br><br>
+
     <section>
-        <div>
-            <RouterLink to="/product/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
-                <i class="pi pi-plus-circle"></i>
-            </RouterLink><br><br>
-
-            <div class="pdf">
-                <button class="text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg text-sm px-5 py-2.5 mx-1" @click="downloadPDF">
-                    <i class="pi pi-download"></i>
-                </button>
-            </div><br>
-
-            <SearchForm @search="handleSearch"/>
+        <div v-if="error">Impossible de charger les products.</div>
+        <div v-else>
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">Code</th>
                         <th scope="col" class="px-6 py-3">Fournisseur</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
+                        <th scope="col" class="px-6 py-3">Stock Min</th>
+                        <th scope="col" class="px-6 py-3">Min sortie</th>
                         <th scope="col" class="px-6 py-3">Qte</th>
                         <th scope="col" class="px-6 py-3">PU</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="product in filteredItems" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                    <tr v-for="product in products" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">{{ product.code }}</td>
                         <td class="px-6 py-4">{{ product.fournisseur?.nom || 'N/A' }}</td>
                         <td class="px-6 py-4">{{ product.designation }}</td>
+                        <td class="px-6 py-4">{{ product.stock_min }}</td>
+                        <td class="px-6 py-4">{{ product.min_sortie }}</td>
+
                         <td class="px-6 py-4 flex items-center space-x-2" :class="{'text-red-600': product.qte <= 10}">
                             <i v-if="product.qte <= 10" class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
                             <b>{{ product.qte }}</b>

@@ -11,7 +11,7 @@ interface ProductInterface
     public function saveProduct($data);
 
     // Show Product
-    public function showProduct($fournisseur_id);
+    public function showProduct($magasin_id);
 
     // Update Product
     public function updateProduct($product, $data);

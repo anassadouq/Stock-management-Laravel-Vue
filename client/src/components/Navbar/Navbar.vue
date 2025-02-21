@@ -26,11 +26,17 @@
         
             <ul class="flex items-center space-x-6">
                 <li>
+                    <RouterLink to="/magasin" class="hover:text-gray-300">Magasin</RouterLink>
+                </li>
+
+                <li>
                     <RouterLink to="/fournisseur" class="hover:text-gray-300">Fournisseur</RouterLink>
                 </li>
+
                 <li>
                     <RouterLink to="/product" class="hover:text-gray-300">Product</RouterLink>
                 </li>
+
                 <li>
                     <RouterLink to="/client" class="hover:text-gray-300">Client</RouterLink>
                 </li>

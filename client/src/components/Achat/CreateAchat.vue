@@ -17,12 +17,19 @@
         qte: '',
     });
 
+    const errorMessage = ref('');
+    const products = ref([]);
+
     const fetchProducts = async () => {
-        const { data } = await axios.get('http://127.0.0.1:8000/api/product');
-        return data;
+        try {
+            const { data } = await axios.get('http://127.0.0.1:8000/api/product');
+            products.value = data;
+        } catch (error) {
+            console.error("Erreur lors du chargement des produits:", error);
+        }
     };
 
-    const { data: products, error } = useQuery({
+    const { error: queryError } = useQuery({
         queryKey: ['products'],
         queryFn: fetchProducts,
     });
@@ -41,6 +48,16 @@
     });
 
     const handleSubmit = () => {
+        const selectedProduct = form.product_id ? form.product_id : null;
+        
+        // Vérifiez si un produit a été sélectionné et si la quantité est valide
+        if (selectedProduct && form.qte <= selectedProduct.min_sortie) {
+            errorMessage.value = `La quantité d'achat doit être supérieure à ${selectedProduct.min_sortie}.`;
+            return; // Ne pas soumettre tant que l'erreur n'est pas corrigée
+        }
+
+        errorMessage.value = ''; // Réinitialiser le message d'erreur si tout est valide
+        
         const selectedProductId = form.product_id ? form.product_id.id : null;
         addAchatMutation.mutate({
             client_id: form.client_id,
@@ -61,6 +78,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Produit</label>
+                        
                         <vue-multiselect
                             v-model="form.product_id" 
                             :options="products" 
@@ -75,6 +93,7 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Quantité</label>
                         <input type="number" v-model="form.qte" placeholder="Quantité" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <div v-if="errorMessage" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
                     </div>
 
                     <div v-if="error" class="text-red-500 text-sm mt-1 mb-4">Impossible de charger les produits.</div>

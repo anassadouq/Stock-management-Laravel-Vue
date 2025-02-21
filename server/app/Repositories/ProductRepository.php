@@ -10,7 +10,7 @@ class ProductRepository implements ProductInterface
 {
     public function getProducts()
     {
-        return Product::with('fournisseur')->get();
+        return Product::all();
     }
 
     public function saveProduct($product)
@@ -18,15 +18,18 @@ class ProductRepository implements ProductInterface
         return Product::create($product);
     }
 
-    public function showProduct($fournisseur_id)
+    public function showProduct($magasin_id)
     {
-        $fournisseur = Fournisseur::find($fournisseur_id);
-        $product = Product::where('fournisseur_id', $fournisseur_id)->get();
-
-        return [
-            'fournisseur' => $fournisseur,
-            'product' => $product
-        ];
+        $magasin = Magasin::with('products.fournisseur')->find($magasin_id);
+    
+        if (!$magasin) {
+            return response()->json(['error' => 'magasin not found'], 404);
+        }
+    
+        return response()->json([
+            'magasin' => $magasin,
+            'products' => $magasin->products,
+        ]);
     }
 
     public function updateProduct($product, $data)

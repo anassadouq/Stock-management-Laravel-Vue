@@ -28,9 +28,9 @@ class ProductService
         return $this->productInterface->updateProduct($product, $data);
     }
 
-    public function showProduct($fournisseur_id)
+    public function showProduct($magasin_id)
     {
-        return $this->productInterface->showProduct($fournisseur_id);
+        return $this->productInterface->showProduct($magasin_id);
     }
 
     public function deleteProduct($product)
