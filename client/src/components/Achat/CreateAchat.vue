@@ -43,7 +43,7 @@
             router.push(`/achat/show/${form.client_id}`);
         },
         onError: () => {
-            toast.error("L'achat n'a pas été ajouté");
+            toast.error("Qté non suffisante");
         }
     });
 
@@ -51,7 +51,7 @@
         const selectedProduct = form.product_id ? form.product_id : null;
         
         // Vérifiez si un produit a été sélectionné et si la quantité est valide
-        if (selectedProduct && form.qte <= selectedProduct.min_sortie) {
+        if (selectedProduct && form.qte < selectedProduct.min_sortie) {
             errorMessage.value = `La quantité d'achat doit être supérieure à ${selectedProduct.min_sortie}.`;
             return; // Ne pas soumettre tant que l'erreur n'est pas corrigée
         }

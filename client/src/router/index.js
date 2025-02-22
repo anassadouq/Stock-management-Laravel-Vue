@@ -47,7 +47,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: Fournisseur,
+            component: Magasin,
             meta: { requiresAuth: true }
         },
 
@@ -105,14 +105,14 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
-            path: '/product/edit/:id',
-            name: 'edit-product',
+            path: '/product/show/:magasin_id/edit/:id',
+            name: 'editProduct',
             component: EditProduct,
             meta: { requiresAuth: true }
         },
         {
             path: '/product/show/:magasin_id',
-            name: 'show-product',
+            name: 'showProduct',
             component: Product,
             meta: { requiresAuth: true }
         },

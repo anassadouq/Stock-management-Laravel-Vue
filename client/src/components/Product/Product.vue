@@ -74,13 +74,13 @@
                         <td class="px-6 py-4">{{ product.stock_min }}</td>
                         <td class="px-6 py-4">{{ product.min_sortie }}</td>
 
-                        <td class="px-6 py-4 flex items-center space-x-2" :class="{'text-red-600': product.qte <= 10}">
-                            <i v-if="product.qte <= 10" class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
+                        <td class="px-6 py-4 flex items-center space-x-2" :class="{'text-red-600': product.qte <= product.stock_min}">
+                            <i v-if="product.qte <= product.stock_min" class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
                             <b>{{ product.qte }}</b>
                         </td>
                         <td class="px-6 py-4">{{ product.pu }}</td>
                         <td class="px-6 py-4">
-                            <RouterLink :to="`/product/edit/${product.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink :to="`/product/show/${magasin_id}/edit/${product.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>
                             </RouterLink>
                             <button @click="confirmAndDeleteProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">

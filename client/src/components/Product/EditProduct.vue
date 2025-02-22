@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, reactive, watchEffect } from 'vue';
+    import { ref, reactive } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
@@ -12,14 +12,18 @@
     const toast = useToast();
     const queryClient = useQueryClient();
 
-    const productId = route.params.id;
+    const magasin_id = ref(route.params.magasin_id);
+    const productId = ref(route.params.id);
 
     const form = reactive({
+        magasin_id: magasin_id.value,
         fournisseur_id: null,
         code: '',
         designation: '',
         qte: '',
         pu: '',
+        stock_min: '',
+        min_sortie: ''
     });
 
     // Fetch fournisseurs list
@@ -34,51 +38,55 @@
 
     // Fetch product details
     const { data: productData } = useQuery({
-        queryKey: ['product', productId],
+        queryKey: ['product', productId.value],
         queryFn: async () => {
-            const response = await axios.get(`http://127.0.0.1:8000/api/product/${productId}`);
+            const response = await axios.get(`http://127.0.0.1:8000/api/product/${productId.value}`);
             return response.data.product;
         },
+        onSuccess: (newProduct) => {
+            if (newProduct) {
+                Object.assign(form, {
+                    magasin_id: newProduct.magasin_id || magasin_id.value,
+                    code: newProduct.code || '',
+                    designation: newProduct.designation || '',
+                    qte: newProduct.qte || '',
+                    pu: newProduct.pu || '',
+                    stock_min: newProduct.stock_min || '',
+                    min_sortie: newProduct.min_sortie || ''
+                });
+
+                if (fournisseurs.value) {
+                    form.fournisseur_id = fournisseurs.value.find(f => f.id === newProduct.fournisseur_id) || null;
+                }
+            }
+        },
         onError: () => toast.error('Failed to fetch product details'),
-    });
-
-    watchEffect(() => {
-        if (productData.value && fournisseurs.value) {
-            form.code = productData.value.code;
-            form.designation = productData.value.designation;
-            form.qte = productData.value.qte;
-            form.pu = productData.value.pu;
-            form.stock_min = productData.value.stock_min;
-            form.min_sortie = productData.value.min_sortie;
-
-            
-            // Match the fournisseur object from the list using its ID
-            form.fournisseur_id = fournisseurs.value.find(f => f.id === productData.value.fournisseur_id) || null;
-        }
     });
 
     // Mutation to update product
     const updateProductMutation = useMutation({
         mutationFn: async (updatedProduct) => {
-            await axios.put(`http://127.0.0.1:8000/api/product/${productId}`, updatedProduct);
+            await axios.put(`http://127.0.0.1:8000/api/product/${productId.value}`, updatedProduct);
         },
         onSuccess: () => {
             toast.success('Product updated successfully');
-            queryClient.invalidateQueries(['product', productId]);
-            router.push('/product');
+            queryClient.invalidateQueries(['product', productId.value]);
+            router.push(`/product/show/${magasin_id.value}`);
         },
         onError: () => toast.error('Product was not updated'),
     });
 
+    // Handle Update
     const handleUpdate = () => {
         updateProductMutation.mutate({
+            magasin_id: form.magasin_id,
             fournisseur_id: form.fournisseur_id ? form.fournisseur_id.id : null,
             code: form.code,
             designation: form.designation,
             qte: form.qte,
             pu: form.pu,
             stock_min: form.stock_min,
-            min_sortie: form.min_sortie,
+            min_sortie: form.min_sortie
         });
     };
 </script>
@@ -116,22 +124,22 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Quantity</label>
+                        <label class="block text-gray-700 font-bold mb-2">Quantité</label>
                         <input type="number" v-model="form.qte" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">PU</label>
+                        <label class="block text-gray-700 font-bold mb-2">Prix Unitaire (PU)</label>
                         <input type="number" step="0.01" v-model="form.pu" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">stock_min</label>
+                        <label class="block text-gray-700 font-bold mb-2">Stock Minimum</label>
                         <input type="number" step="0.01" v-model="form.stock_min" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">min_sortie</label>
+                        <label class="block text-gray-700 font-bold mb-2">Minimum Sortie</label>
                         <input type="number" step="0.01" v-model="form.min_sortie" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 

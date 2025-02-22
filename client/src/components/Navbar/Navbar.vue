@@ -34,10 +34,6 @@
                 </li>
 
                 <li>
-                    <RouterLink to="/product" class="hover:text-gray-300">Product</RouterLink>
-                </li>
-
-                <li>
                     <RouterLink to="/client" class="hover:text-gray-300">Client</RouterLink>
                 </li>
   
