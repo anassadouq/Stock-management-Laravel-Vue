@@ -46,5 +46,5 @@ class AchatRepository implements AchatInterface
             return response()->json(['message' => 'achat deleted successfully']);
         }
         return response()->json(['error' => 'Failed to delete achat'], 500);
-    }    
+    }
 }

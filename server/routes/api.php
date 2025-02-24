@@ -7,6 +7,7 @@ use App\Http\Controllers\AchatController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MagasinController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DetailProductController;
 use App\Http\Controllers\FournisseurController;
 
 // Auth
@@ -23,6 +24,11 @@ Route::resource('fournisseur', FournisseurController::class);
 // Product
 Route::resource('product', ProductController::class);
 Route::get('product/show/{magasin_id}', [ProductController::class, 'show']);
+
+// Detail_product
+Route::resource('detail_product', DetailProductController::class);
+Route::get('detail_product/show/{product_id}', [DetailProductController::class, 'show']);
+
 // Client
 Route::resource('client', ClientController::class);
 

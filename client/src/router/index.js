@@ -19,6 +19,11 @@ import Product from "@/components/Product/Product.vue";
 import CreateProduct from "@/components/Product/CreateProduct.vue";
 import EditProduct from "@/components/Product/EditProduct.vue";
 
+// Detail Product
+import DetailProduct from "@/components/DetailProduct/DetailProduct.vue";
+import CreateDetailProduct from "@/components/DetailProduct/CreateDetailProduct.vue";
+import EditDetailProduct from "@/components/DetailProduct/EditDetailProduct.vue";
+
 // Client
 import Client from "@/components/Client/Client.vue";
 import CreateClient from "@/components/Client/CreateClient.vue";
@@ -114,6 +119,32 @@ const router = createRouter({
             path: '/product/show/:magasin_id',
             name: 'showProduct',
             component: Product,
+            meta: { requiresAuth: true }
+        },
+
+        // Detail Product
+        {
+            path: '/detailProduct',
+            name: 'detailProduct',
+            component: DetailProduct,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/detailProduct/show/:product_id/create',
+            name: 'createDetail',
+            component: CreateDetailProduct,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/detailProduct/show/:product_id/edit/:id',
+            name: 'editDetail',
+            component: EditDetailProduct,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/detailProduct/show/:product_id',
+            name: 'showDetailProduct',
+            component: DetailProduct,
             meta: { requiresAuth: true }
         },
 

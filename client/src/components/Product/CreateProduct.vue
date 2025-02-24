@@ -4,7 +4,6 @@ import { useRoute } from 'vue-router';
 import router from '@/router';
 import axios from 'axios';
 import { useToast } from 'vue-toastification';
-import VueMultiselect from 'vue-multiselect';
 import Navbar from '../Navbar/Navbar.vue';
 
 const toast = useToast();
@@ -12,13 +11,10 @@ const route = useRoute();
 const magasin_id = ref(route.params.magasin_id); // Récupération de magasin_id
 
 const form = reactive({
-    fournisseur_id: null,
     code: '',
     designation: '',
     stock_min: '',
     min_sortie: '',
-    qte: '',
-    pu: '',
 });
 
 const fournisseurs = ref([]);
@@ -36,17 +32,13 @@ const fetchFournisseurs = async () => {
 onMounted(fetchFournisseurs);
 
 const handleSubmit = async () => {
-    const selectedFournisseurId = form.fournisseur_id ? form.fournisseur_id.id : null;
 
     const newProduct = {
-        magasin_id: magasin_id.value, // Ajout du magasin_id
-        fournisseur_id: selectedFournisseurId,
+        magasin_id: magasin_id.value,
         code: form.code,
         designation: form.designation,
         stock_min: form.stock_min,
         min_sortie: form.min_sortie,
-        qte: form.qte,
-        pu: form.pu,
     };
 
     try {
@@ -72,19 +64,6 @@ const handleSubmit = async () => {
                     <h2 class="text-3xl text-center font-semibold mb-6">Ajouter un produit</h2>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <vue-multiselect
-                            v-model="form.fournisseur_id" 
-                            :options="fournisseurs" 
-                            :searchable="true"
-                            track-by="id"
-                            label="nom"
-                            placeholder="Choisissez un fournisseur"
-                            class="w-full"
-                        />
-                    </div>
-
-                    <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Code</label>
                         <input type="text" v-model="form.code" placeholder="Code"
                             class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
@@ -108,20 +87,6 @@ const handleSubmit = async () => {
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Min sortie</label>
                         <input type="number" v-model="form.min_sortie" placeholder="Min sortie"
-                            class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
-                    </div>
-
-                    <!-- Quantité -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" v-model="form.qte" placeholder="Quantité"
-                            class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
-                    </div>
-
-                    <!-- Prix Unitaire -->
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Prix Unitaire (PU)</label>
-                        <input type="number" v-model="form.pu" placeholder="PU"
                             class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
                     </div>
 

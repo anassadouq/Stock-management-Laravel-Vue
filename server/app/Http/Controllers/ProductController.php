@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Magasin;
 use App\Models\Product;
-use App\Models\Fournisseur;
 use Illuminate\Http\Request;
 use App\Services\ProductService;
 
@@ -28,10 +27,9 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    // Show a single product with its fournisseur details
     public function show($magasin_id)
     {
-        $magasin = Magasin::with('products.fournisseur')->find($magasin_id);
+        $magasin = Magasin::with('products')->find($magasin_id);
     
         if (!$magasin) {
             return response()->json(['error' => 'magasin not found'], 404);

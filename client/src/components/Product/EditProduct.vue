@@ -17,11 +17,8 @@
 
     const form = reactive({
         magasin_id: magasin_id.value,
-        fournisseur_id: null,
         code: '',
         designation: '',
-        qte: '',
-        pu: '',
         stock_min: '',
         min_sortie: ''
     });
@@ -49,15 +46,9 @@
                     magasin_id: newProduct.magasin_id || magasin_id.value,
                     code: newProduct.code || '',
                     designation: newProduct.designation || '',
-                    qte: newProduct.qte || '',
-                    pu: newProduct.pu || '',
                     stock_min: newProduct.stock_min || '',
                     min_sortie: newProduct.min_sortie || ''
                 });
-
-                if (fournisseurs.value) {
-                    form.fournisseur_id = fournisseurs.value.find(f => f.id === newProduct.fournisseur_id) || null;
-                }
             }
         },
         onError: () => toast.error('Failed to fetch product details'),
@@ -80,11 +71,8 @@
     const handleUpdate = () => {
         updateProductMutation.mutate({
             magasin_id: form.magasin_id,
-            fournisseur_id: form.fournisseur_id ? form.fournisseur_id.id : null,
             code: form.code,
             designation: form.designation,
-            qte: form.qte,
-            pu: form.pu,
             stock_min: form.stock_min,
             min_sortie: form.min_sortie
         });
@@ -101,19 +89,6 @@
                     <h2 class="text-3xl text-center font-semibold mb-6">Editer le produit</h2>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Fournisseur</label>
-                        <vue-multiselect
-                            v-model="form.fournisseur_id"
-                            :options="fournisseurs || []"
-                            :searchable="true"
-                            track-by="id"
-                            label="nom"
-                            placeholder="Choisissez un fournisseur"
-                            class="w-full"
-                        />
-                    </div>
-
-                    <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Code</label>
                         <input type="text" v-model="form.code" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
@@ -121,16 +96,6 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">Designation</label>
                         <input type="text" v-model="form.designation" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Quantité</label>
-                        <input type="number" v-model="form.qte" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Prix Unitaire (PU)</label>
-                        <input type="number" step="0.01" v-model="form.pu" class="border-gray-300 rounded-md shadow-sm w-full px-4 py-2"/>
                     </div>
 
                     <div class="mb-4">

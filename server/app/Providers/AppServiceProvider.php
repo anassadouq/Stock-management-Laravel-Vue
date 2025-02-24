@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Interfaces\AchatInterface;
 use App\Interfaces\ClientInterface;
 use App\Interfaces\ProductInterface;
+use App\Interfaces\DetailProductInterface;
 use App\Interfaces\FournisseurInterface;
 use App\Interfaces\MagasinInterface;
 
@@ -12,6 +13,7 @@ use App\Interfaces\MagasinInterface;
 use App\Repositories\AchatRepository;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\DetailProductRepository;
 use App\Repositories\FournisseurRepository;
 use App\Repositories\MagasinRepository;
 
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(FournisseurInterface::class, FournisseurRepository::class);
         $this->app->bind(ProductInterface::class, ProductRepository::class);
+        $this->app->bind(DetailProductInterface::class, DetailProductRepository::class);
         $this->app->bind(ClientInterface::class, ClientRepository::class);
         $this->app->bind(AchatInterface::class, AchatRepository::class);
         $this->app->bind(MagasinInterface::class, MagasinRepository::class);

@@ -57,32 +57,28 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">Code</th>
-                        <th scope="col" class="px-6 py-3">Fournisseur</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
                         <th scope="col" class="px-6 py-3">Stock Min</th>
                         <th scope="col" class="px-6 py-3">Min sortie</th>
-                        <th scope="col" class="px-6 py-3">Qte</th>
-                        <th scope="col" class="px-6 py-3">PU</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="product in products" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">{{ product.code }}</td>
-                        <td class="px-6 py-4">{{ product.fournisseur?.nom || 'N/A' }}</td>
                         <td class="px-6 py-4">{{ product.designation }}</td>
                         <td class="px-6 py-4">{{ product.stock_min }}</td>
                         <td class="px-6 py-4">{{ product.min_sortie }}</td>
 
-                        <td class="px-6 py-4 flex items-center space-x-2" :class="{'text-red-600': product.qte <= product.stock_min}">
-                            <i v-if="product.qte <= product.stock_min" class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
-                            <b>{{ product.qte }}</b>
-                        </td>
-                        <td class="px-6 py-4">{{ product.pu }}</td>
                         <td class="px-6 py-4">
+                            <RouterLink :to="`/detailProduct/show/${product.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
+                                <i class="pi pi-eye"></i>
+                            </RouterLink>
+
                             <RouterLink :to="`/product/show/${magasin_id}/edit/${product.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>
                             </RouterLink>
+
                             <button @click="confirmAndDeleteProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
