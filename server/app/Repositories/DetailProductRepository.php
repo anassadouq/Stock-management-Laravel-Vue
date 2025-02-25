@@ -20,25 +20,25 @@ class DetailProductRepository implements DetailProductInterface
 
     public function showDetail($product_id)
     {
-        $product = Product::with('detail_products.fournisseur')->find($product_id);
+        $product = Product::with('detailProducts.fournisseur')->find($product_id);
     
         if (!$product) {
-            return response()->json(['error' => 'product not found'], 404);
+            return response()->json(['error' => 'Product not found'], 404);
         }
     
-        return response()->json([
+        return [
             'product' => $product,
-            'detail_products' => $product->detail_products,
-        ]);
-    }
+            'detail_products' => $product->detailProducts,
+        ];
+    }    
 
-    public function updateDetail($product, $data)
+    public function updateDetail($detail_product, $data)
     {
         if ($detail_product->update($data)) {
             return $detail_product->fresh();
         }
-        return response()->json(['error' => 'Failed to update product'], 500);
-    }
+        return response()->json(['error' => 'Failed to update detail_product'], 500);
+    }    
 
     public function deleteDetail($detail_product)
     {

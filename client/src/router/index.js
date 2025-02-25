@@ -124,25 +124,25 @@ const router = createRouter({
 
         // Detail Product
         {
-            path: '/detailProduct',
-            name: 'detailProduct',
+            path: '/detail_product',
+            name: 'detail_product',
             component: DetailProduct,
             meta: { requiresAuth: true }
         },
         {
-            path: '/detailProduct/show/:product_id/create',
+            path: '/detail_product/show/:product_id/create',
             name: 'createDetail',
             component: CreateDetailProduct,
             meta: { requiresAuth: true }
         },
         {
-            path: '/detailProduct/show/:product_id/edit/:id',
+            path: '/detail_product/show/:product_id/edit/:id',
             name: 'editDetail',
             component: EditDetailProduct,
             meta: { requiresAuth: true }
         },
         {
-            path: '/detailProduct/show/:product_id',
+            path: '/detail_product/show/:product_id',
             name: 'showDetailProduct',
             component: DetailProduct,
             meta: { requiresAuth: true }

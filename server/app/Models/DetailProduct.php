@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Achat;
 use App\Models\Product;
 use App\Models\Fournisseur;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class DetailProduct extends Model
@@ -15,7 +16,7 @@ class DetailProduct extends Model
         'fournisseur_id', 'product_id', 'qte', 'pu'
     ];
 
-    public function product() 
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
@@ -23,5 +24,10 @@ class DetailProduct extends Model
     public function fournisseur() 
     {
         return $this->belongsTo(Fournisseur::class);
+    }
+
+    public function achat() 
+    {
+        return $this->hasMany(Achat::class);
     }
 }

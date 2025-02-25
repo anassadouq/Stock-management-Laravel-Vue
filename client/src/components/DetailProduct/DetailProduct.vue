@@ -14,12 +14,15 @@
 
     const fetchDetailProduct = async () => {
         const { data } = await axios.get(`http://127.0.0.1:8000/api/detail_product/show/${product_id}`);
-        return data.detail_products;
+        return data.detail_products ?? [];  // Pluralized the key to match controller response
     };
 
     const { data: detail_product, error } = useQuery({
         queryKey: ['detail_product', product_id],
-        queryFn: fetchDetailProduct
+        queryFn: fetchDetailProduct,
+        onError: () => {
+            toast.error('Failed to load detail products');
+        }
     });
 
     const deleteDetailMutation = useMutation({
@@ -28,10 +31,10 @@
         },
         onSuccess: () => {
             queryClient.invalidateQueries(['detail_product', product_id]);
-            toast.success('detail product deleted successfully');
+            toast.success('Detail product deleted successfully');
         },
         onError: () => {
-            toast.error('detail product was not deleted');
+            toast.error('Failed to delete detail product');
         }
     });
 
@@ -42,11 +45,11 @@
     };
 </script>
 
-
 <template>
-    <Navbar/><br>
+    <Navbar /><br>
 
-    <RouterLink :to="`/detailProduct/show/${product_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+    <RouterLink :to="`/detail_product/show/${product_id}/create`"
+        class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
         <i class="pi pi-plus-circle"></i>
     </RouterLink><br><br>
 
@@ -62,17 +65,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in detail_product" :key="item.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">{{ item.fournisseur?.nom }}</td>
+                    <tr v-for="item in detail_product || []" :key="item.id"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                        <td class="px-6 py-4">{{ item.fournisseur?.nom || 'N/A' }}</td>
                         <td class="px-6 py-4">{{ item.qte }}</td>
                         <td class="px-6 py-4">{{ item.pu }}</td>
 
                         <td class="px-6 py-4">
-                            <RouterLink :to="`/detailProduct/show/${product_id}/edit/${item.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink :to="`/detail_product/show/${product_id}/edit/${item.id}`"
+                                class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>
                             </RouterLink>
 
-                            <button @click="confirmAndDeleteDetail(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button @click="confirmAndDeleteDetail(item.id)"
+                                class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

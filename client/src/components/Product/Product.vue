@@ -71,7 +71,7 @@
                         <td class="px-6 py-4">{{ product.min_sortie }}</td>
 
                         <td class="px-6 py-4">
-                            <RouterLink :to="`/detailProduct/show/${product.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink :to="`/detail_product/show/${product.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-eye"></i>
                             </RouterLink>
 

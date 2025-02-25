@@ -6,7 +6,7 @@ use App\Interfaces\DetailProductInterface;
 
 class DetailProductService
 {
-    public $productInterface;
+    protected $detailProductInterface;
 
     public function __construct(DetailProductInterface $detailProductInterface)
     {

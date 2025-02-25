@@ -4,6 +4,7 @@ namespace App\Models;
 
 use GuzzleHttp\Client;
 use App\Models\Product;
+use App\Models\DetailProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,7 +13,7 @@ class Achat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id', 'product_id', 'qte'
+        'client_id', 'product_id', 'detail_product_id', 'qte'
     ];
     
     public function client()
@@ -23,6 +24,11 @@ class Achat extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function detail_product()
+    {
+        return $this->belongsTo(DetailProduct::class, 'detail_product_id');
     }
 
     public static function boot()
