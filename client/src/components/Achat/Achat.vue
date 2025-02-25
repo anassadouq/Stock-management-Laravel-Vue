@@ -1,45 +1,54 @@
 <script setup>
-    import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
-    import axios from 'axios';
-    import { useRoute, useRouter } from 'vue-router';
-    import { useToast } from 'vue-toastification';
-    import Navbar from '../Navbar/Navbar.vue';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+import axios from 'axios';
+import { useRoute, useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
+import Navbar from '../Navbar/Navbar.vue';
 
-    const route = useRoute();
-    const router = useRouter();
-    const toast = useToast();
-    const queryClient = useQueryClient();
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
+const queryClient = useQueryClient();
 
-    const client_id = route.params.client_id;
+const client_id = route.params.client_id;
 
-    const fetchAchats = async () => {
+// Fetch Achats from API
+const fetchAchats = async () => {
+    try {
         const { data } = await axios.get(`http://127.0.0.1:8000/api/achat/show/${client_id}`);
-        return data.achats;
-    };
+        return data.achats;  // FIXED: Correct API response key
+    } catch (error) {
+        console.error("Erreur lors du chargement des achats:", error);
+        throw new Error("Impossible de charger les achats.");
+    }
+};
 
-    const { data: achats, error } = useQuery({
-        queryKey: ['achats', client_id],
-        queryFn: fetchAchats
-    });
+// Fetch Achats with Vue Query
+const { data: achats, error, isLoading } = useQuery({
+    queryKey: ['achat', client_id],
+    queryFn: fetchAchats,
+});
 
-    const deleteAchatMutation = useMutation({
-        mutationFn: async (id) => {
-            await axios.delete(`http://127.0.0.1:8000/api/achat/${id}`);
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries(['achats', client_id]);
-            toast.success('Achat deleted successfully');
-        },
-        onError: () => {
-            toast.error('Achat was not deleted');
-        }
-    });
+// Mutation for Deleting Achat
+const deleteAchatMutation = useMutation({
+    mutationFn: async (id) => {
+        await axios.delete(`http://127.0.0.1:8000/api/achat/${id}`);
+    },
+    onSuccess: () => {
+        queryClient.invalidateQueries(['achat', client_id]);
+        toast.success('Achat supprimé avec succès');
+    },
+    onError: () => {
+        toast.error("L'achat n'a pas été supprimé");
+    }
+});
 
-    const deleteAchat = (id) => {
-        if (window.confirm('Are you sure you want to delete this achat?')) {
-            deleteAchatMutation.mutate(id);
-        }
-    };
+// Delete Achat Function
+const deleteAchat = (id) => {
+    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet achat ?')) {
+        deleteAchatMutation.mutate(id);
+    }
+};
 </script>
 
 
@@ -51,26 +60,21 @@
     </RouterLink><br><br>
 
     <section>
-        <div v-if="error">Impossible de charger les achats.</div>
-        <div v-else>
-            <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <div>
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3">Produit</th>
-                        <th scope="col" class="px-6 py-3">Prix Unitaire</th>
                         <th scope="col" class="px-6 py-3">Quantité</th>
-                        <th scope="col" class="px-6 py-3">Total</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="achat in achats" :key="achat.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">{{ achat.product.designation }}</td>
-                        <td class="px-6 py-4">{{ achat.product.pu + ' DH' }}</td>
-                        <td class="px-6 py-4">{{ achat.qte }}</td>
-                        <td class="px-6 py-4">{{ achat.qte * achat.product.pu + ' DH' }}</td>
+                    <tr v-for="item in achats" :key="item.id" class="bg-white border-b">
+                        <td class="px-6 py-4">{{ item.product?.code }}</td>
+                        <td class="px-6 py-4">{{ item.qte }}</td>
                         <td class="px-6 py-4">
-                            <button @click="deleteAchat(achat.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button @click="deleteAchat(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

@@ -21,13 +21,8 @@ class DetailProduct extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function fournisseur() 
+    public function fournisseur()
     {
         return $this->belongsTo(Fournisseur::class);
-    }
-
-    public function achat() 
-    {
-        return $this->hasMany(Achat::class);
     }
 }

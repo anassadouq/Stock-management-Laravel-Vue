@@ -29,10 +29,12 @@ class ProductController extends Controller
 
     public function show($magasin_id)
     {
-        $magasin = Magasin::with('products')->find($magasin_id);
+        $magasin = Magasin::with(['products' => function ($query) {
+            $query->withSum('detail_products', 'qte');  // Ajoute la somme des quantités
+        }])->find($magasin_id);
     
         if (!$magasin) {
-            return response()->json(['error' => 'magasin not found'], 404);
+            return response()->json(['error' => 'Magasin not found'], 404);
         }
     
         return response()->json([

@@ -60,6 +60,7 @@
                         <th scope="col" class="px-6 py-3">Designation</th>
                         <th scope="col" class="px-6 py-3">Stock Min</th>
                         <th scope="col" class="px-6 py-3">Min sortie</th>
+                        <th scope="col" class="px-6 py-3">Total Quantité</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
@@ -69,7 +70,10 @@
                         <td class="px-6 py-4">{{ product.designation }}</td>
                         <td class="px-6 py-4">{{ product.stock_min }}</td>
                         <td class="px-6 py-4">{{ product.min_sortie }}</td>
-
+                        <td class="px-6 py-4 flex items-center space-x-2" :class="{'text-red-600': product.detail_products_sum_qte <= product.stock_min}">
+                            <i v-if="product.detail_products_sum_qte <= product.stock_min" class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
+                            &nbsp;{{ product.detail_products_sum_qte }}
+                        </td>
                         <td class="px-6 py-4">
                             <RouterLink :to="`/detail_product/show/${product.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-eye"></i>

@@ -12,7 +12,7 @@
     const router = useRouter();
 
     const form = reactive({
-        product_id: route.params.product_id, // 'product_id' from URL
+        product_id: route.params.product_id,
         fournisseur_id: null,
         qte: '',
         pu: '',

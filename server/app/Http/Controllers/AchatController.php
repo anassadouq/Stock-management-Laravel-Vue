@@ -18,8 +18,8 @@ class AchatController extends Controller
 
     public function index()
     {
-        $achat = $this->achatService->getAchats();
-        return response()->json($achat);
+        $achats = $this->achatService->getAchats();
+        return response()->json($achats);
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class AchatController extends Controller
 
     public function show($client_id)
     {
-        $client = Client::with('achat.product.detail_product')->find($client_id);
+        $client = Client::with('achats.product')->find($client_id);
     
         if (!$client) {
             return response()->json(['error' => 'Client not found'], 404);
@@ -38,7 +38,7 @@ class AchatController extends Controller
     
         return response()->json([
             'client' => $client,
-            'achat' => $client->achat,
+            'achats' => $client->achats,
         ]);
     }
 
