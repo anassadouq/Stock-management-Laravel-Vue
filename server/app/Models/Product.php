@@ -27,7 +27,7 @@ class Product extends Model
         return $this->hasMany(Achat::class);
     }
 
-    public function detail_products() 
+    public function detail_products()
     {
         return $this->hasMany(DetailProduct::class);
     }

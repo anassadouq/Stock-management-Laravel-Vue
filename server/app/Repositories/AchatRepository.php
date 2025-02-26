@@ -10,8 +10,8 @@ class AchatRepository implements AchatInterface
 {
     public function getAchats()
     {
-        return Achat::all();
-    }
+        return Achat::with(['product', 'client'])->get();
+    }       
 
     public function saveAchat($achat)
     {

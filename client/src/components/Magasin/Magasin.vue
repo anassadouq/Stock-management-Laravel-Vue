@@ -73,6 +73,11 @@
 
 <template>
     <Navbar/><br>
+
+    <RouterLink to="/all_product" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5 mx-1">
+        <i class="pi pi-list"></i> Products List
+    </RouterLink><br><br>
+
     <section>
         <div>
             <RouterLink to="/magasin/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">

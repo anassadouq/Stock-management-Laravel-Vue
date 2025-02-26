@@ -79,12 +79,16 @@
 
 <template>
     <Navbar/><br>
+    <RouterLink to="all_achat" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5 mx-1">
+        <i class="pi pi-list"> Achat List</i>
+    </RouterLink><br><br>
+
+    <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+        <i class="pi pi-plus-circle"></i>
+    </RouterLink><br><br>
+    
     <section>
         <div>
-            <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
-                <i class="pi pi-plus-circle"></i>
-            </RouterLink><br><br>
-
             <div class="pdf">
                 <button class="text-white bg-yellow-600 hover:bg-yellow-700 rounded-lg text-sm px-5 py-2.5 mx-1" @click="downloadPDF">
                     <i class="pi pi-download"></i>

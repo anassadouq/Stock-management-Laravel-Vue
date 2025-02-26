@@ -16,6 +16,7 @@ import EditFournisseur from "@/components/Fournisseur/EditFournisseur.vue";
 
 // Product
 import Product from "@/components/Product/Product.vue";
+import AllProduct from "@/components/Product/AllProduct.vue";
 import CreateProduct from "@/components/Product/CreateProduct.vue";
 import EditProduct from "@/components/Product/EditProduct.vue";
 
@@ -31,6 +32,7 @@ import EditClient from "@/components/Client/EditClient.vue";
 
 // Achat
 import Achat from "@/components/Achat/Achat.vue";
+import AllAchat from "@/components/Achat/AllAchat.vue";
 import CreateAchat from "@/components/Achat/CreateAchat.vue";
 
 const router = createRouter({
@@ -104,6 +106,12 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
         {
+            path: '/all_product',
+            name: 'all_product',
+            component: AllProduct,
+            meta: { requiresAuth: true }
+        },
+        {
             path: '/product/show/:magasin_id/create',
             name: 'createProduct',
             component: CreateProduct,
@@ -173,6 +181,12 @@ const router = createRouter({
             path: '/achat/show/:client_id',
             name: 'show-achat',
             component: Achat,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/all_achat',
+            name: 'all_achat',
+            component: AllAchat,
             meta: { requiresAuth: true }
         },
         {

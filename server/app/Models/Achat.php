@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Client;
+use App\Models\Client;
 use App\Models\Product;
 use App\Models\DetailProduct;
 use Illuminate\Database\Eloquent\Model;
