@@ -54,19 +54,22 @@
 
     // Handle form submission
     const handleSubmit = async () => {
-        // Validate product selection
         if (!form.product_id || !form.product_id.id) {
             errorMessage.value = "Veuillez sélectionner un produit.";
             return;
         }
 
-        // Validate quantity
         if (!form.qte || form.qte <= 0) {
             errorMessage.value = "Veuillez entrer une quantité valide.";
             return;
         }
 
-        // Clear error message if valid
+        const selectedProduct = products.value.find(p => p.id === form.product_id.id);
+        if (selectedProduct && selectedProduct.detail_products_sum_qte < form.qte) {
+            errorMessage.value = "Stock insuffisant pour cet achat.";
+            return;
+        }
+
         errorMessage.value = '';
 
         try {

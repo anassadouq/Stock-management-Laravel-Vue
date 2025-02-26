@@ -61,6 +61,7 @@
                         <th scope="col" class="px-6 py-3">Fournisseur</th>
                         <th scope="col" class="px-6 py-3">Qte</th>
                         <th scope="col" class="px-6 py-3">PU</th>
+                        <th scope="col" class="px-6 py-3">Total</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
@@ -70,7 +71,7 @@
                         <td class="px-6 py-4">{{ item.fournisseur?.nom || 'N/A' }}</td>
                         <td class="px-6 py-4">{{ item.qte }}</td>
                         <td class="px-6 py-4">{{ item.pu }}</td>
-
+                        <td class="px-6 py-4">{{ item.qte * item.pu}} DH</td>
                         <td class="px-6 py-4">
                             <RouterLink :to="`/detail_product/show/${product_id}/edit/${item.id}`"
                                 class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
