@@ -4,20 +4,22 @@ namespace App\Providers;
 //Interfaces
 use App\Interfaces\AchatInterface;
 use App\Interfaces\ClientInterface;
-use App\Interfaces\ProductInterface;
-use App\Interfaces\DetailProductInterface;
-use App\Interfaces\FournisseurInterface;
+use App\Interfaces\FactureInterface;
 use App\Interfaces\MagasinInterface;
+use App\Interfaces\ProductInterface;
+use App\Repositories\AchatRepository;
 
 //Repositories
-use App\Repositories\AchatRepository;
 use App\Repositories\ClientRepository;
-use App\Repositories\ProductRepository;
-use App\Repositories\DetailProductRepository;
-use App\Repositories\FournisseurRepository;
+use App\Repositories\FactureRepository;
 use App\Repositories\MagasinRepository;
-
+use App\Repositories\ProductRepository;
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\FournisseurInterface;
+use App\Interfaces\DetailProductInterface;
+
+use App\Repositories\FournisseurRepository;
+use App\Repositories\DetailProductRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,9 +29,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductInterface::class, ProductRepository::class);
         $this->app->bind(DetailProductInterface::class, DetailProductRepository::class);
         $this->app->bind(ClientInterface::class, ClientRepository::class);
+        $this->app->bind(FactureInterface::class, FactureRepository::class);
         $this->app->bind(AchatInterface::class, AchatRepository::class);
         $this->app->bind(MagasinInterface::class, MagasinRepository::class);
-    }        
+    }
 
     public function boot()
     {

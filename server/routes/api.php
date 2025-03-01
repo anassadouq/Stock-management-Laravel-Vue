@@ -5,10 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AchatController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\FactureController;
 use App\Http\Controllers\MagasinController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\DetailProductController;
 use App\Http\Controllers\FournisseurController;
+use App\Http\Controllers\DetailProductController;
 
 // Auth
 Route::post('/register', [AuthController::class, 'register']);
@@ -32,6 +33,9 @@ Route::get('detail_product/show/{product_id}', [DetailProductController::class, 
 // Client
 Route::resource('client', ClientController::class);
 
+// Facture
+Route::resource('facture', FactureController::class);
+Route::get('facture/show/{client_id}', [FactureController::class, 'show']);
 // Achat
 Route::resource('achat', AchatController::class);
-Route::get('achat/show/{client_id}', [AchatController::class, 'show']);
+Route::get('achat/show/{facture_id}', [AchatController::class, 'show']);

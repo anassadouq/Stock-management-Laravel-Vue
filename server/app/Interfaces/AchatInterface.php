@@ -11,7 +11,7 @@ interface AchatInterface
     public function saveAchat($data);
 
     // Show achat
-    public function showAchat($client_id);
+    public function showAchat($facture_id);
 
     // Update achat
     public function updateAchat($achat, $data);

@@ -111,7 +111,7 @@
                         <td class="px-6 py-4">{{ client.adresse}}</td>
                         <td class="px-6 py-4">{{ client.tel }}</td>
                         <td class="px-6 py-4">
-                            <RouterLink :to="`/achat/show/${client.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink :to="`/facture/show/${client.id}`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-eye"></i>
                             </RouterLink>
                             <RouterLink :to="`/client/edit/${client.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">

@@ -34,9 +34,10 @@ class AchatService
 
             // Enregistrer l'achat
             $achat = Achat::create([
-                'client_id' => $data['client_id'],
+                'facture_id' => $data['facture_id'],
                 'product_id' => $data['product_id'],
                 'qte' => $data['qte'],
+                'pu' => $data['pu'],
             ]);
 
             // Déduire la quantité de chaque DetailProduct
@@ -71,9 +72,9 @@ class AchatService
         return $this->achatInterface->updateAchat($achat, $data);
     }
 
-    public function showAchat($client_id)
+    public function showAchat($facture_id)
     {
-        return $this->achatInterface->showAchat($client_id);
+        return $this->achatInterface->showAchat($facture_id);
     }
 
     public function deleteAchat($achat)

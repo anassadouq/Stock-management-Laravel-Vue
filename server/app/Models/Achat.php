@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Client;
+use App\Models\Facture;
 use App\Models\Product;
 use App\Models\DetailProduct;
 use Illuminate\Database\Eloquent\Model;
@@ -13,12 +14,12 @@ class Achat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id', 'product_id', 'qte'
+        'facture_id', 'product_id', 'qte', 'pu'
     ];
     
-    public function client()
+    public function facture()
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Facture::class, 'facture_id');
     }
 
     public function product()

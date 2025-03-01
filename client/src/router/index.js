@@ -30,6 +30,12 @@ import Client from "@/components/Client/Client.vue";
 import CreateClient from "@/components/Client/CreateClient.vue";
 import EditClient from "@/components/Client/EditClient.vue";
 
+// Facture
+import Facture from "@/components/Facture/Facture.vue";
+import CreateFacture from "@/components/Facture/CreateFacture.vue";
+import EditFacture from "@/components/Facture/EditFacture.vue";
+import AllFacture from "@/components/Facture/AllFacture.vue";
+
 // Achat
 import Achat from "@/components/Achat/Achat.vue";
 import AllAchat from "@/components/Achat/AllAchat.vue";
@@ -176,11 +182,43 @@ const router = createRouter({
             meta: { requiresAuth: true }
         },
 
+        // Facture
+        {
+            path: '/facture/show/:client_id',
+            name: 'show-facture',
+            component: Facture,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/facture/show/:client_id/create',
+            name: 'createfacture',
+            component: CreateFacture,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/facture/show/:client_id/edit/:id',
+            name: 'editFacture',
+            component: EditFacture,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/all_facture',
+            name: 'all_facture',
+            component: AllFacture,
+            meta: { requiresAuth: true }
+        },
+
         // Achat
         {
-            path: '/achat/show/:client_id',
+            path: '/achat/show/:facture_id',
             name: 'show-achat',
             component: Achat,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/achat/show/:facture_id/create',
+            name: 'createachat',
+            component: CreateAchat,
             meta: { requiresAuth: true }
         },
         {
@@ -189,12 +227,6 @@ const router = createRouter({
             component: AllAchat,
             meta: { requiresAuth: true }
         },
-        {
-            path: '/achat/show/:client_id/create',
-            name: 'createachat',
-            component: CreateAchat,
-            meta: { requiresAuth: true }
-        }
     ],
 });
 
