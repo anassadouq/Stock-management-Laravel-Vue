@@ -66,12 +66,15 @@
         }
 
         const selectedProduct = products.value.find(p => p.id === form.product_id.id);
-        if (selectedProduct && selectedProduct.detail_products_sum_qte < form.qte) {
-            errorMessage.value = "Stock insuffisant pour cet achat.";
-            return;
+        if (selectedProduct) {
+            const min_sortie = selectedProduct.min_sortie; // Assumed min_sortie field
+            if (form.qte < min_sortie) {
+                errorMessage.value = `La quantité doit être supérieure ou égale à ${min_sortie}.`;
+                return;
+            }
         }
 
-        errorMessage.value = '';
+        errorMessage.value = '';  // Clear any previous error
 
         try {
             await addAchatMutation.mutateAsync({
@@ -86,7 +89,6 @@
         }
     };
 </script>
-
 
 <template>
     <Navbar/>
@@ -118,7 +120,6 @@
                     <div class="mb-4">
                         <label class="block text-gray-700 font-bold mb-2">PU</label>
                         <input type="number" v-model="form.pu" placeholder="PU" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
-                        <div v-if="errorMessage" class="text-red-500 text-sm mt-1">{{ errorMessage }}</div>
                     </div>
 
                     <div>
