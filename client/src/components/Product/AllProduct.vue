@@ -25,7 +25,8 @@
             item.code.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             item.designation.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             item.stock_min.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
-            item.min_sortie.toLowerCase().includes(searchFilter.value.toLowerCase()) 
+            item.min_sortie.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+            item.product.detail_products_sum_qte.toLowerCase().includes(searchFilter.value.toLowerCase()) 
         );
     });
 
@@ -59,26 +60,30 @@
     // Download PDF function
     const downloadPDF = () => {
         const pdf = new jsPDF();
-        pdf.text('product List', 10, 10);
+        pdf.text('Product List', 10, 10);
         let y = 20;
         pdf.setFontSize(10);
+        
         pdf.text('Magasin', 10, y);
         pdf.text('Code', 40, y);
         pdf.text('Designation', 70, y);
         pdf.text('Stock min', 120, y);
         pdf.text('Min sortie', 150, y);
+        pdf.text('Stock Total', 180, y);
 
         y += 10;
         
         filteredItems.value.forEach(f => {
-            pdf.text(f.magasin.nom , 10, y);
+            pdf.text(f.magasin.nom, 10, y);
             pdf.text(f.code, 40, y);
             pdf.text(f.designation, 70, y);
-            pdf.text(f.stock_min, 120, y);
-            pdf.text(f.min_sortie, 150, y);
+            pdf.text(f.stock_min.toString(), 120, y);
+            pdf.text(f.min_sortie.toString(), 150, y);
+            pdf.text(f.detail_products_sum_qte.toString(), 180, y);
+            
             y += 10;
         });
-        
+
         pdf.save('product.pdf');
     };
 </script>
@@ -109,8 +114,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="product in filteredItems" :key="product.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">{{ product.magasin.nom }}</td>
-                        <td class="px-6 py-4">{{ product.code }}</td>
+                        <td class="px-6 py-4">
+                            <RouterLink :to="`/product/show/${product.magasin.id}`" class="text-blue-700">{{ product.magasin.nom }}</RouterLink>
+                        </td>
+                        <td class="px-6 py-4">
+                            <RouterLink :to="`/product/show/${product.magasin.id}`" class="text-blue-700">{{ product.code }}</RouterLink>
+                        </td>
                         <td class="px-6 py-4">{{ product.designation }}</td>
                         <td class="px-6 py-4">{{ product.stock_min }}</td>
                         <td class="px-6 py-4">{{ product.min_sortie }}</td>

@@ -13,7 +13,7 @@ class ProductRepository implements ProductInterface
         return Product::with(['magasin', 'detail_products'])
             ->withSum('detail_products', 'qte') // Ajoute la somme des quantités
             ->get();
-    }    
+    }
 
     public function saveProduct($product)
     {

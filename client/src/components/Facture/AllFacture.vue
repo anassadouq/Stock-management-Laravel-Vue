@@ -100,7 +100,9 @@
                 <tbody>
                     <tr v-for="item in filteredItems" :key="facture.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                         <td class="px-6 py-4">{{ item.client.nom }}</td>
-                        <td class="px-6 py-4">{{ item.num }}</td>
+                        <td class="px-6 py-4">
+                            <RouterLink :to="`/achat/show/${item.id}`" class="text-blue-700">{{ item.num }}</RouterLink>
+                        </td>
                         <td class="px-6 py-4">{{ item.date }}</td>        
                         <td class="px-6 py-4">
                             <button @click="confirmDeletingFacture(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
