@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\Client;
 use App\Models\Facture;
 use App\Models\Product;
-use App\Models\DetailProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -21,6 +20,11 @@ class Achat extends Model
     {
         return $this->belongsTo(Facture::class, 'facture_id');
     }
+
+    public function client()
+    {
+        return $this->hasOneThrough(Client::class, Facture::class, 'id', 'id', 'facture_id', 'client_id');
+    }    
 
     public function product()
     {

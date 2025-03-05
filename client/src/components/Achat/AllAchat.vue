@@ -21,8 +21,9 @@
     // Computed property for filtering items
     const filteredItems = computed(() => {
         return (achat.value || []).filter(item =>
-            item.client.nom.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+            item.facture.client.nom.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             item.product.code.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
+            item.product.designation.toLowerCase().includes(searchFilter.value.toLowerCase()) ||
             item.qte.toLowerCase().includes(searchFilter.value.toLowerCase())
         );
     });
@@ -57,20 +58,25 @@
     // Download PDF function
     const downloadPDF = () => {
         const pdf = new jsPDF();
-        pdf.text('achat List', 10, 10);
+        pdf.text('Liste des achats', 10, 10);
         let y = 20;
         pdf.setFontSize(10);
         pdf.text('Client', 10, y);
         pdf.text('Product Code', 70, y);
-        pdf.text('Designation', 110, y);
+        pdf.text('Designation', 100, y);
         pdf.text('Qte', 150, y);
+        pdf.text('PU', 170, y);
+        pdf.text('PT', 190, y);
+
         y += 10;
         
         filteredItems.value.forEach(f => {
-            pdf.text(f.client.nom, 10, y);
+            pdf.text(f.facture.client.nom, 10, y);
             pdf.text(f.product.code, 70, y);
-            pdf.text(f.product.designation, 110, y);
+            pdf.text(f.product.designation, 100, y);
             pdf.text(f.qte, 150, y);
+            pdf.text(f.pu.toString(), 170, y);
+            pdf.text((f.pu * f.qte).toString() + " DH", 190, y);
             y += 10;
         });
         
@@ -97,15 +103,19 @@
                         <th scope="col" class="px-6 py-3">Product Code</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
                         <th scope="col" class="px-6 py-3">Quantité</th>
+                        <th scope="col" class="px-6 py-3">PU</th>
+                        <th scope="col" class="px-6 py-3">PT</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in filteredItems" :key="achat.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">{{ item.client.nom }}</td>
+                        <td class="px-6 py-4">{{ item.facture.client.nom }}</td>
                         <td class="px-6 py-4">{{ item.product.code }}</td>
                         <td class="px-6 py-4">{{ item.product.designation }}</td>
-                        <td class="px-6 py-4">{{ item.qte }}</td>          
+                        <td class="px-6 py-4">{{ item.qte }}</td>
+                        <td class="px-6 py-4">{{ item.pu }}</td>   
+                        <td class="px-6 py-4">{{ item.pu * item.qte }} DH</td>             
                         <td class="px-6 py-4">
                             <button @click="confirmDeletingAchat(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>

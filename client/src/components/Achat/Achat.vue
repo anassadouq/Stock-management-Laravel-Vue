@@ -69,44 +69,41 @@
         }
     };
 
-        // Download PDF function
-        const downloadPDF = () => {
-            const pdf = new jsPDF();
-            pdf.text('Liste des Achats', 10, 10);
-            let y = 20;
-            pdf.setFontSize(10);
+    // Download PDF function
+    const downloadPDF = () => {
+        const pdf = new jsPDF();
+        pdf.text('Liste des Achats', 10, 10);
+        let y = 20;
+        pdf.setFontSize(10);
             
-            // Entêtes du tableau
-            pdf.text('Produit', 10, y);
-            pdf.text('Designation', 50, y);
-            pdf.text('Qte', 120, y);
-            pdf.text('PU', 140, y);
-            pdf.text('PT', 170, y);
+        // Entêtes du tableau
+        pdf.text('Produit', 10, y);
+        pdf.text('Designation', 50, y);
+        pdf.text('Qte', 120, y);
+        pdf.text('PU', 140, y);
+        pdf.text('PT', 170, y);
             
+        y += 10;
+
+        let prixTotal = 0; // Initialisation du prix total
+
+        // Remplissage du tableau avec les données
+        filteredItems.value.forEach(f => {
+            pdf.text(f.product.code, 10, y);
+            pdf.text(f.product.designation, 50, y);
+            pdf.text(f.qte.toString(), 120, y);
+            pdf.text(f.pu.toString(), 140, y);
+            pdf.text((f.pu * f.qte).toString() + " DH", 190, y);
+
+            prixTotal += f.qte * f.pu;
             y += 10;
+        });
 
-            let prixTotal = 0; // Initialisation du prix total
+        // Ajout du prix total général
+        pdf.text(`Total: ${prixTotal} DH`, 160, y + 10);
 
-            // Remplissage du tableau avec les données
-            filteredItems.value.forEach(f => {
-                pdf.text(f.product.code, 10, y);
-                pdf.text(f.product.designation, 50, y);
-                pdf.text(f.qte.toString(), 120, y);
-                pdf.text(f.pu.toString(), 140, y);
-                pdf.text((f.pu * f.qte).toString(), 170, y);
-
-                prixTotal += f.qte * f.pu;  // Ajout au prix total
-
-                y += 10;
-            });
-
-            // Ajout du prix total général
-            pdf.text(`Total: ${prixTotal} DH`, 160, y + 10);
-
-            pdf.save('achat.pdf');
-        };
-
-
+        pdf.save('achat.pdf');
+    };
 </script>
 
 

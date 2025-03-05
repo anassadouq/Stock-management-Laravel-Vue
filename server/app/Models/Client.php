@@ -22,6 +22,6 @@ class Client extends Model
     
     public function achat()
     {
-        return $this->hasMany(Achat::class, 'client_id');
+        return $this->hasMany(Achat::class);
     }
 }
