@@ -96,9 +96,9 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Nom</th>
-                        <th scope="col" class="px-6 py-3">Adresse</th>
-                        <th scope="col" class="px-6 py-3">Téléphone</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Adress</th>
+                        <th scope="col" class="px-6 py-3">Phone</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>

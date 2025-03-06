@@ -103,12 +103,12 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Magasin</th>
+                        <th scope="col" class="px-6 py-3">Store</th>
                         <th scope="col" class="px-6 py-3">Code</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Stock Min</th>
-                        <th scope="col" class="px-6 py-3">Min sortie</th>
-                        <th scope="col" class="px-6 py-3">Stock Total</th>
+                        <th scope="col" class="px-6 py-3">Minimum Stock</th>
+                        <th scope="col" class="px-6 py-3">Minimum Output</th>
+                        <th scope="col" class="px-6 py-3">Total Stock</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>

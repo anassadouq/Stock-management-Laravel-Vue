@@ -112,9 +112,9 @@
                     <tr>
                         <th scope="col" class="px-6 py-3">Code</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Stock Min</th>
-                        <th scope="col" class="px-6 py-3">Min sortie</th>
-                        <th scope="col" class="px-6 py-3">Total Quantité</th>
+                        <th scope="col" class="px-6 py-3">Minimum Stock</th>
+                        <th scope="col" class="px-6 py-3">Minimum Output</th>
+                        <th scope="col" class="px-6 py-3">Total Stock</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>

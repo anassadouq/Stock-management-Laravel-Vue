@@ -99,12 +99,11 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Client</th>
-                        <th scope="col" class="px-6 py-3">Product Code</th>
+                        <th scope="col" class="px-6 py-3">Product</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Quantité</th>
-                        <th scope="col" class="px-6 py-3">PU</th>
-                        <th scope="col" class="px-6 py-3">PT</th>
+                        <th scope="col" class="px-6 py-3">Quantity</th>
+                        <th scope="col" class="px-6 py-3">UP</th>
+                        <th scope="col" class="px-6 py-3">TP</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>

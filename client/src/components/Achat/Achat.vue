@@ -124,11 +124,11 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Produit</th>
+                        <th scope="col" class="px-6 py-3">Product</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Quantité</th>
-                        <th scope="col" class="px-6 py-3">PU</th>
-                        <th scope="col" class="px-6 py-3">Total</th>
+                        <th scope="col" class="px-6 py-3">Quantity</th>
+                        <th scope="col" class="px-6 py-3">UP</th>
+                        <th scope="col" class="px-6 py-3">TP</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
