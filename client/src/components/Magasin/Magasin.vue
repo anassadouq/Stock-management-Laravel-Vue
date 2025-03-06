@@ -74,10 +74,6 @@
 <template>
     <Navbar/><br>
 
-    <RouterLink to="/all_product" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5 mx-1">
-        <i class="pi pi-list"></i> Products List
-    </RouterLink><br><br>
-
     <section>
         <div>
             <RouterLink to="/magasin/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
@@ -94,7 +90,7 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Nom</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>

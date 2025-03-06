@@ -79,13 +79,6 @@
 
 <template>
     <Navbar/><br>
-    <RouterLink to="all_achat" class="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm px-5 py-2.5 mx-1">
-        <i class="pi pi-list"> Achat List</i>
-    </RouterLink><br><br>
-
-    <RouterLink to="all_facture" class="text-white bg-black hover:bg-black rounded-lg text-sm px-5 py-2.5 mx-1">
-        <i class="pi pi-list"> Facture List</i>
-    </RouterLink><br><br>
 
     <RouterLink to="/client/create" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
         <i class="pi pi-plus-circle"></i>

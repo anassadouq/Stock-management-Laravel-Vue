@@ -4,6 +4,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Register from "@/components/Auth/Register.vue";
 import Login from "@/components/Auth/Login.vue";
 
+// Daschboard
+import Dashboard from "@/components/Dashboard/Dashboard.vue";
+
 // Magasin
 import Magasin from "@/components/Magasin/Magasin.vue";
 import CreateMagasin from "@/components/Magasin/CreateMagasin.vue";
@@ -59,8 +62,8 @@ const router = createRouter({
         
         {
             path: '/',
-            name: 'home',
-            component: Magasin,
+            name: 'dashboard',
+            component: Dashboard,
             meta: { requiresAuth: true }
         },
 
