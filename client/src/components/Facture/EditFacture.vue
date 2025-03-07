@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, reactive } from 'vue';
+    import { reactive, watchEffect } from 'vue';
     import { useRouter, useRoute } from 'vue-router';
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
@@ -11,48 +11,50 @@
     const toast = useToast();
     const queryClient = useQueryClient();
 
-    const client_id = ref(route.params.client_id);
-    const factureId = ref(route.params.id);
+    const client_id = route.params.client_id;
+    const factureId = parseInt(route.params.id);
 
     const form = reactive({
-        client_id: client_id.value,
+        client_id: client_id,
         num: '',
         date: '',
     });
 
-    // Fetch facture details
-    const { data: factureData } = useQuery({
-        queryKey: ['facture', factureId.value],
+    // Fetch all factures for the client
+    const { data: clientFactureData } = useQuery({
+        queryKey: ['facture', client_id],
         queryFn: async () => {
-            const response = await axios.get(`http://127.0.0.1:8000/api/facture/${factureId.value}`);
-            return response.data.facture;
+            const response = await axios.get(`http://127.0.0.1:8000/api/facture/${client_id}`);
+            return response.data;
         },
-        onSuccess: (editFacture) => {
-            if (editFacture) {
-                Object.assign(form, {
-                    client_id: editFacture.client_id || client_id.value,
-                    num: editFacture.num || '',
-                    date: editFacture.date || '',
-                });
+    });
+
+    // Watch the data and update the form
+    watchEffect(() => {
+        if (clientFactureData.value && clientFactureData.value.facture) {
+            const facture = clientFactureData.value.facture.find(f => f.id === factureId);
+            if (facture) {
+                form.num = facture.num || '';
+                form.date = facture.date || '';
             }
-        },
-        onError: () => toast.error('Failed to fetch facture details'),
+        }
     });
 
     // Mutation to update facture
     const updateFactureMutation = useMutation({
-        mutationFn: async (updateFacture) => {
-            await axios.put(`http://127.0.0.1:8000/api/facture/${factureId.value}`, updateFacture);
+        mutationFn: async (updatedFacture) => {
+            await axios.put(`http://127.0.0.1:8000/api/facture/${factureId}`, updatedFacture);
         },
         onSuccess: () => {
-            toast.success('facture updated successfully');
-            queryClient.invalidateQueries(['facture', factureId.value]);
-            router.push(`/facture/show/${client_id.value}`);
+            toast.success('Facture mise à jour avec succès');
+            queryClient.invalidateQueries(['facture', client_id]); // Invalider la requête pour mettre à jour la liste
+            setTimeout(() => {
+                router.push(`/facture/show/${client_id}`);
+            }, 500);
         },
-        onError: () => toast.error('facture was not updated'),
+        onError: () => toast.error('Échec de la mise à jour de la facture'),
     });
 
-    // Handle Update
     const handleUpdate = () => {
         updateFactureMutation.mutate({
             client_id: form.client_id,
