@@ -14,7 +14,8 @@ use App\Http\Controllers\DetailProductController;
 // Auth
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/check-token-expiration', [AuthController::class, 'checkTokenExpiration']);
 
 // Magasin
 Route::resource('magasin', MagasinController::class);

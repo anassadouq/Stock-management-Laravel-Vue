@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import axios from 'axios';
 
 // Auth
 import Register from "@/components/Auth/Register.vue";
@@ -233,14 +234,32 @@ const router = createRouter({
     ],
 });
 
-// Navigation Guard to Protect Routes
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = localStorage.getItem('authToken'); // Check if user has token
+    const token = localStorage.getItem('authToken'); // Check if user has token
 
-    if (to.meta.requiresAuth && !isAuthenticated) {
-        next('/login');
+    if (to.meta.requiresAuth) {
+        if (!token) {
+            next('/login'); // Redirect to login if no token
+        } else {
+            // Check token expiration
+            axios.post('http://127.0.0.1:8000/api/check-token-expiration', {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(response => {
+                if (response.data.message === 'Token expired') {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('expiresAt');
+                    next('/login'); // Redirect to login if token expired
+                } else {
+                    next(); // Allow access if token is valid
+                }
+            }).catch(() => {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('expiresAt');
+                next('/login');
+            });
+        }
     } else {
-        next(); // Allow access
+        next(); // Allow access to routes that do not require authentication
     }
 });
 
