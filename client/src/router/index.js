@@ -9,6 +9,10 @@ import Login from "@/components/Auth/Login.vue";
 import Dashboard from "@/components/Dashboard/Dashboard.vue";
 
 // Magasin
+import Users from "@/components/Users/Users.vue";
+import EditUser from "@/components/Users/EditUser.vue";
+
+// Magasin
 import Magasin from "@/components/Magasin/Magasin.vue";
 import CreateMagasin from "@/components/Magasin/CreateMagasin.vue";
 import EditMagasin from "@/components/Magasin/EditMagasin.vue";
@@ -67,6 +71,20 @@ const router = createRouter({
             path: '/',
             name: 'dashboard',
             component: Dashboard,
+            meta: { requiresAuth: true }
+        },
+
+        // Users
+        {
+            path: '/users',
+            name: 'users',
+            component: Users,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/user/edit/:id',
+            name: 'edit-user',
+            component: EditUser,
             meta: { requiresAuth: true }
         },
 
@@ -238,26 +256,26 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('role'); // Assuming role is saved in localStorage
+    const userRole = localStorage.getItem('role'); // Récupération du rôle depuis localStorage
 
     if (to.meta.requiresAuth) {
         if (!token) {
-            next('/login'); // Redirect to login if no token
+            next('/login'); // Rediriger vers login si pas de token
         } else {
-            // Check token expiration
             axios.post('http://127.0.0.1:8000/api/check-token-expiration', {}, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(response => {
                 if (response.data.message === 'Token expired') {
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('expiresAt');
-                    next('/login'); // Redirect to login if token expired
+                    next('/login'); // Rediriger vers login si token expiré
                 } else {
-                    // If the route requires "super_admin" role, restrict access
-                    if (to.path === '/register' && userRole !== 'super_admin') {
-                        next('/'); // Redirect to dashboard or another page if not super_admin
+                    // Bloquer l'accès à certaines routes si l'utilisateur n'est pas "super_admin"
+                    if ((to.path === '/users' || to.path === '/register' || to.path.startsWith('/user/edit/')) && userRole !== 'super_admin') 
+                    {
+                        next('/'); // Rediriger vers la page d'accueil si non autorisé
                     } else {
-                        next(); // Allow access if role is valid or route doesn't require "super_admin"
+                        next(); // Autoriser l'accès
                     }
                 }
             }).catch(() => {
@@ -267,7 +285,7 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
-        next(); // Allow access to routes that do not require authentication
+        next(); // Autoriser l'accès aux routes publiques
     }
 });
 
