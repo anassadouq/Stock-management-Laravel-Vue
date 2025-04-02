@@ -48,19 +48,21 @@ import CreateAchat from "@/components/Achat/CreateAchat.vue";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        {
-            path: '/register',
-            name: 'register',
-            component: Register,
-            meta: { requiresAuth: false } // Allow access without login
-        },
+        // Auth
         {
             path: '/login',
             name: 'login',
             component: Login,
-            meta: { requiresAuth: false } // Allow access without login
+            meta: { requiresAuth: false }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            component: Register,
+            meta: { requiresAuth: true }
         },
         
+        // Dashboard
         {
             path: '/',
             name: 'dashboard',

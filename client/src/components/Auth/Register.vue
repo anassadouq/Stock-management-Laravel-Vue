@@ -7,6 +7,7 @@
 
     const data = reactive({
         name: "",
+        role: "",
         email: "",
         password: "",
         password_confirmation:"",
@@ -17,6 +18,7 @@
     const handleSubmit = async () => {
         const newUser = {
             name: data.name,
+            role: data.role,
             email: data.email,
             password: data.password,
             password_confirmation: data.password_confirmation,
@@ -41,6 +43,14 @@
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
                     <input type="text" v-model="data.name" placeholder="Enter Name" name="name" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                </div>
+
+                <div class="mb-4">
+                    <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <select v-model="data.role" name="role" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="super_admin">Super Admin</option>
+                        <option value="admin">Admin</option>
+                    </select>
                 </div>
   
                 <div class="mb-4">
