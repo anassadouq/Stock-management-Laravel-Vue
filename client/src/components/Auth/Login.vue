@@ -55,12 +55,6 @@ const handleLogin = async () => {
                 <button type="submit" class="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">
                     Login
                 </button>
-
-                <div class="text-center mt-4 text-sm text-gray-600">
-                    <p> Don't have an account?  
-                        <RouterLink to="register" class="text-blue-500 hover:underline">Sign up</RouterLink>
-                    </p>
-                </div>
             </form>
         </div>
     </div>

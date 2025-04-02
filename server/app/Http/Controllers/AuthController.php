@@ -13,19 +13,19 @@ class AuthController extends Controller
     public function register(Request $request) {
         $fields = $request->validate([
             'name' => 'required|string',
-            'role' => 'required|string',
-            'email' => 'required|string|unique:users,email',
-            'password' => 'required|string|confirmed'
+            'role' => 'required|string|in:super_admin,admin',
+            'email' => 'required|string|email|unique:users,email',
         ]);
 
+        // Set password as the name
         $user = User::create([
             'name' => $fields['name'],
             'role' => $fields['role'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password'])
+            'password' => Hash::make($fields['name']) // Secure password hashing
         ]);
 
-        // Creating token with expiration time defined in config
+        // Create API token
         $token = $user->createToken('myapptoken')->plainTextToken;
 
         return response([
@@ -36,7 +36,7 @@ class AuthController extends Controller
 
     public function login(Request $request) {
         $fields = $request->validate([
-            'email' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string'
         ]);
 
@@ -47,16 +47,9 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials'], 401);
         }
 
-        // Create token
+        // Create token and set expiration
         $token = $user->createToken('myapptoken')->plainTextToken;
-
-        // Set expiration date
-        $expiresAt = Carbon::now()->addHours(2); // Token expires in  hours
-
-        // Update token expiration in the database
-        $user->tokens->last()->update([
-            'expires_at' => $expiresAt
-        ]);
+        $expiresAt = Carbon::now()->addHours(2); // Token expires in 2 hours
 
         return response([
             'user' => $user,
@@ -66,22 +59,17 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request) {
-        // Revoke all user's tokens
-        $request->user()->tokens->each(function($token) {
-            $token->delete();
-        });
+        $request->user()->tokens()->delete(); // Revoke all tokens
 
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
-    // Check if the token has expired
     public function checkTokenExpiration(Request $request) {
         $token = $request->bearerToken();
 
         if ($token) {
             $tokenModel = PersonalAccessToken::findToken($token);
 
-            // Check if token exists and if it has expired
             if ($tokenModel && $tokenModel->expires_at && Carbon::parse($tokenModel->expires_at)->isPast()) {
                 return response()->json(['message' => 'Token expired'], 401);
             }

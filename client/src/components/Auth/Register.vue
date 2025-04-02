@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from 'vue-router';
 import { reactive } from 'vue';
 import axios from 'axios';
 import router from '@/router';
@@ -9,29 +8,19 @@ const data = reactive({
     name: "",
     role: "",
     email: "",
-    password: "",
-    password_confirmation: "",
 });
 
 const toast = useToast();
 
 const handleSubmit = async () => {
     const token = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('role'); // Get the role from localStorage
+    const userRole = localStorage.getItem('role'); 
 
-    // Check if the user has the 'super_admin' role before proceeding
+    // Only allow super_admin to add users
     if (userRole !== 'super_admin') {
         toast.error('You do not have permission to add new users.');
         return;
     }
-
-    const newUser = {
-        name: data.name,
-        role: data.role,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password_confirmation,
-    };
 
     if (!token) {
         toast.error('User is not authenticated');
@@ -39,22 +28,19 @@ const handleSubmit = async () => {
     }
 
     try {
-        await axios.post('http://127.0.0.1:8000/api/register', newUser, {
-            headers: {
-                'Authorization': `Bearer ${token}` // Passing token in Authorization header
-            }
+        await axios.post('http://127.0.0.1:8000/api/register', data, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        toast.success('User Added Successfully');
-        router.push('/users');
+        toast.success('User added successfully');
+        router.push('/users'); // Redirect to users list
     } catch (error) {
         console.error('Error:', error.response || error);
 
         if (error.response) {
             const errors = error.response.data.errors;
             if (errors) {
-                console.log('Validation Errors:', errors);
-                toast.error('Validation errors occurred');
+                toast.error(Object.values(errors).flat().join(', '));
             } else {
                 toast.error('An error occurred while adding the user');
             }
@@ -71,28 +57,18 @@ const handleSubmit = async () => {
             <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Register</h1>
             <form @submit.prevent="handleSubmit" method="post">
                 <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
-                    <input type="text" v-model="data.name" placeholder="Enter Name" name="name" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input type="text" v-model="data.name" placeholder="Enter Name" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"/>
                 </div>
 
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                    <input type="email" v-model="data.email" placeholder="Enter Email" name="email" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                </div>
-  
-                <div class="mb-4">
-                    <label for="psw" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                    <input type="password" v-model="data.password" placeholder="Enter Password" name="password" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
-                </div>
-  
-                <div class="mb-4">
-                    <label for="psw-confirmation" class="block text-sm font-medium text-gray-700 mb-2">Password Confirmation</label>
-                    <input type="password" v-model="data.password_confirmation" placeholder="Confirm Password" name="password_confirmation" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" v-model="data.email" placeholder="Enter Email" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"/>
                 </div>
 
                 <div class="mb-4">
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
-                    <select v-model="data.role" name="role" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <select v-model="data.role" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="super_admin">Super Admin</option>
                         <option value="admin">Admin</option>
                     </select>
@@ -102,12 +78,6 @@ const handleSubmit = async () => {
                     Register
                 </button>
             </form>
-  
-            <div class="text-center mt-4 text-sm text-gray-600">
-                <p> Already have an account? 
-                    <RouterLink to="login" class="text-blue-500 hover:underline">Sign in</RouterLink>
-                </p>
-            </div>
         </div>
     </div>
 </template>

@@ -75,7 +75,7 @@
 
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 font-bold mb-2">Name</label>
-                        <input type="text" v-model="form.name" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2"/>
+                        <input type="text" v-model="form.name" class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" readonly/>
                     </div>
 
                     <div class="mb-4">
