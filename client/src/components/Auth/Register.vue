@@ -1,38 +1,68 @@
 <script setup>
-    import { RouterLink } from 'vue-router';
-    import { reactive } from 'vue';
-    import axios from 'axios';
-    import router from '@/router';
-    import { useToast } from 'vue-toastification';
+import { RouterLink } from 'vue-router';
+import { reactive } from 'vue';
+import axios from 'axios';
+import router from '@/router';
+import { useToast } from 'vue-toastification';
 
-    const data = reactive({
-        name: "",
-        role: "",
-        email: "",
-        password: "",
-        password_confirmation:"",
-    });
+const data = reactive({
+    name: "",
+    role: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+});
 
-    const toast = useToast();
+const toast = useToast();
 
-    const handleSubmit = async () => {
-        const newUser = {
-            name: data.name,
-            role: data.role,
-            email: data.email,
-            password: data.password,
-            password_confirmation: data.password_confirmation,
-        }
+const handleSubmit = async () => {
+    const token = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('role'); // Get the role from localStorage
 
-        try {
-            const response = await axios.post('http://127.0.0.1:8000/api/register', newUser);
-            toast.success('User Added Successfully');
-            router.push('/login');
-        } catch (error) {
-            console.error('Error fetching user', error);
-            toast.error('User was not added');
+    // Check if the user has the 'super_admin' role before proceeding
+    if (userRole !== 'super_admin') {
+        toast.error('You do not have permission to add new users.');
+        return;
+    }
+
+    const newUser = {
+        name: data.name,
+        role: data.role,
+        email: data.email,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
+    };
+
+    if (!token) {
+        toast.error('User is not authenticated');
+        return;
+    }
+
+    try {
+        await axios.post('http://127.0.0.1:8000/api/register', newUser, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Passing token in Authorization header
+            }
+        });
+
+        toast.success('User Added Successfully');
+        router.push('/login');
+    } catch (error) {
+        console.error('Error:', error.response || error);
+
+        if (error.response) {
+            const errors = error.response.data.errors;
+            if (errors) {
+                console.log('Validation Errors:', errors);
+                toast.error('Validation errors occurred');
+            } else {
+                toast.error('An error occurred while adding the user');
+            }
+        } else {
+            toast.error('Server error occurred');
         }
     }
+};
 </script>
 
 <template>
@@ -67,7 +97,7 @@
                     <label for="psw-confirmation" class="block text-sm font-medium text-gray-700 mb-2">Password Confirmation</label>
                     <input type="password" v-model="data.password_confirmation" placeholder="Confirm Password" name="password_confirmation" required class="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"/>
                 </div>
-  
+
                 <button type="submit" class="w-full bg-blue-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">
                     Register
                 </button>

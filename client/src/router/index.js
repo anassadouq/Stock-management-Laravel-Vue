@@ -237,7 +237,8 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('authToken'); // Check if user has token
+    const token = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('role'); // Assuming role is saved in localStorage
 
     if (to.meta.requiresAuth) {
         if (!token) {
@@ -252,7 +253,12 @@ router.beforeEach((to, from, next) => {
                     localStorage.removeItem('expiresAt');
                     next('/login'); // Redirect to login if token expired
                 } else {
-                    next(); // Allow access if token is valid
+                    // If the route requires "super_admin" role, restrict access
+                    if (to.path === '/register' && userRole !== 'super_admin') {
+                        next('/'); // Redirect to dashboard or another page if not super_admin
+                    } else {
+                        next(); // Allow access if role is valid or route doesn't require "super_admin"
+                    }
                 }
             }).catch(() => {
                 localStorage.removeItem('authToken');

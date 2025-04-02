@@ -20,13 +20,18 @@ const handleLogin = async () => {
             password: form.value.password
         });
 
-        // Save token and expiration date in localStorage
-        localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('expiresAt', response.data.expires_at); // Save expiration time
+        // Extract user role from the response
+        const { token, expires_at, user } = response.data; 
+        
+        // Save authentication details in localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('expiresAt', expires_at);
+        localStorage.setItem('role', user.role);
 
-        router.push('/');
+        toast.success('Login successful!');
+        router.push('/'); // Redirect to home/dashboard
     } catch (error) {
-        console.error('Error logging in', error);
+        console.error('Error logging in:', error);
         toast.error('Invalid credentials');
     }
 };
