@@ -39,24 +39,31 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string'
         ]);
-
-        // Verify user
+    
         $user = User::where('email', $fields['email'])->first();
-
+    
         if (!$user || !Hash::check($fields['password'], $user->password)) {
-            return response(['message' => 'Invalid credentials'], 401);
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
-
-        // Create token and set expiration
-        $token = $user->createToken('myapptoken')->plainTextToken;
-        $expiresAt = Carbon::now()->addHours(2); // Token expires in 2 hours
-
-        return response([
+    
+        // Create token
+        $tokenResult = $user->createToken('myapptoken');
+        $token = $tokenResult->plainTextToken;
+        
+        // Set expiration time (1 hour from now)
+        $expiresAt = Carbon::now()->addHour();
+    
+        // Store expiration time in the database
+        $tokenModel = $tokenResult->accessToken;
+        $tokenModel->expires_at = $expiresAt;
+        $tokenModel->save();
+    
+        return response()->json([
             'user' => $user,
             'token' => $token,
             'expires_at' => $expiresAt
         ], 200);
-    }
+    }      
 
     public function logout(Request $request) {
         $request->user()->tokens()->delete(); // Revoke all tokens
@@ -66,15 +73,18 @@ class AuthController extends Controller
 
     public function checkTokenExpiration(Request $request) {
         $token = $request->bearerToken();
-
+    
         if ($token) {
             $tokenModel = PersonalAccessToken::findToken($token);
-
-            if ($tokenModel && $tokenModel->expires_at && Carbon::parse($tokenModel->expires_at)->isPast()) {
-                return response()->json(['message' => 'Token expired'], 401);
+    
+            if ($tokenModel && $tokenModel->expires_at) {
+                if (Carbon::parse($tokenModel->expires_at)->isPast()) {
+                    $tokenModel->delete(); // Delete expired token
+                    return response()->json(['message' => 'Token expired'], 401);
+                }
             }
         }
-
+    
         return response()->json(['message' => 'Token valid'], 200);
-    }
+    }       
 }

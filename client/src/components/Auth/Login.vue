@@ -1,41 +1,41 @@
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
-import { RouterLink } from 'vue-router';
+    import { ref } from 'vue';
+    import axios from 'axios';
+    import { useRouter } from 'vue-router';
+    import { useToast } from 'vue-toastification';
 
-const router = useRouter();
-const toast = useToast();
+    const router = useRouter();
+    const toast = useToast();
 
-const form = ref({
-    email: "",
-    password: ""
-});
+    const form = ref({
+        email: "",
+        password: ""
+    });
 
-const handleLogin = async () => {
-    try {
-        const response = await axios.post('http://127.0.0.1:8000/api/login', {
-            email: form.value.email,
-            password: form.value.password
-        });
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/login', {
+                email: form.value.email,
+                password: form.value.password
+            });
 
-        // Extract user role from the response
-        const { token, expires_at, user } = response.data; 
-        
-        // Save authentication details in localStorage
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('expiresAt', expires_at);
-        localStorage.setItem('role', user.role);
+            // Extract user role from the response
+            const { token, expires_at, user } = response.data; 
+            
+            // Save authentication details in localStorage
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('expiresAt', expires_at);
+            localStorage.setItem('role', user.role);
 
-        toast.success('Login successful!');
-        router.push('/'); // Redirect to home/dashboard
-    } catch (error) {
-        console.error('Error logging in:', error);
-        toast.error('Invalid credentials');
-    }
-};
+            toast.success('Login successful!');
+            router.push('/');
+        } catch (error) {
+            console.error('Error logging in:', error);
+            toast.error('Invalid credentials');
+        }
+    };
 </script>
+
 
 <template>
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
