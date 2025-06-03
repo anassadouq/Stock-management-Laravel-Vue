@@ -1,6 +1,7 @@
 <script setup>
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
+    import { ref, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import { useToast } from 'vue-toastification';
     import Navbar from '../Navbar/Navbar.vue';
@@ -9,6 +10,7 @@
     const router = useRouter();
     const toast = useToast();
     const queryClient = useQueryClient();
+    const userRole = ref(null);
 
     const product_id = route.params.product_id;
 
@@ -23,6 +25,10 @@
         onError: () => {
             toast.error('Failed to load detail products');
         }
+    });
+
+    onMounted(() => {
+        userRole.value = localStorage.getItem('role');
     });
 
     const deleteDetailMutation = useMutation({
@@ -48,7 +54,7 @@
 <template>
     <Navbar /><br>
 
-    <RouterLink :to="`/detail_product/show/${product_id}/create`"
+    <RouterLink v-if="userRole === 'admin' || userRole === 'super_admin'" :to="`/detail_product/show/${product_id}/create`"
         class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
         <i class="pi pi-plus-circle"></i>
     </RouterLink><br><br>
@@ -62,7 +68,7 @@
                         <th scope="col" class="px-6 py-3">Quantity</th>
                         <th scope="col" class="px-6 py-3">UP</th>
                         <th scope="col" class="px-6 py-3">Total</th>
-                        <th scope="col" class="px-6 py-3">Actions</th>
+                        <th scope="col" class="px-6 py-3" v-if="userRole === 'admin' || userRole === 'super_admin'">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,7 +78,7 @@
                         <td class="px-6 py-4">{{ item.qte }}</td>
                         <td class="px-6 py-4">{{ item.pu }}</td>
                         <td class="px-6 py-4">{{ item.qte * item.pu}} DH</td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4" v-if="userRole === 'admin' || userRole === 'super_admin'">
                             <RouterLink :to="`/detail_product/show/${product_id}/edit/${item.id}`"
                                 class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>

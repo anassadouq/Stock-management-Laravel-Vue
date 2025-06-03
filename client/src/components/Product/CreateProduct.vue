@@ -78,14 +78,14 @@ const handleSubmit = async () => {
 
                     <!-- Stock Min -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Stock min</label>
+                        <label class="block text-gray-700 font-bold mb-2">Stock minimum</label>
                         <input type="number" v-model="form.stock_min" placeholder="Stock min"
                             class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
                     </div>
 
                     <!-- Min sortie -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2">Min sortie</label>
+                        <label class="block text-gray-700 font-bold mb-2">Minimum sortie</label>
                         <input type="number" v-model="form.min_sortie" placeholder="Min sortie"
                             class="border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200 focus:border-green-500 w-full px-4 py-2" />
                     </div>

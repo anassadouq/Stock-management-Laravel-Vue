@@ -256,11 +256,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
-    const userRole = localStorage.getItem('role'); // Récupération du rôle depuis localStorage
+    const userRole = localStorage.getItem('role'); // Récupère le rôle depuis le localStorage
 
     if (to.meta.requiresAuth) {
         if (!token) {
-            next('/login'); // Rediriger vers login si pas de token
+            next('/login');
         } else {
             axios.post('http://127.0.0.1:8000/api/check-token-expiration', {}, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -268,14 +268,28 @@ router.beforeEach((to, from, next) => {
                 if (response.data.message === 'Token expired') {
                     localStorage.removeItem('authToken');
                     localStorage.removeItem('expiresAt');
-                    next('/login'); // Rediriger vers login si token expiré
+                    next('/login');
                 } else {
-                    // Bloquer l'accès à certaines routes si l'utilisateur n'est pas "super_admin"
-                    if ((to.path === '/users' || to.path === '/register' || to.path.startsWith('/user/edit/')) && userRole !== 'super_admin') 
-                    {
-                        next('/'); // Rediriger vers la page d'accueil si non autorisé
-                    } else {
-                        next(); // Autoriser l'accès
+                    // Block access to user management if not super_admin
+                    if (
+                        (to.path === '/users' || to.path === '/register' || to.path.startsWith('/user/edit/')) && userRole !== 'super_admin'
+                    ) {
+                        next('/');
+                    }
+                    // Block create/edit for controller
+                    else if (
+                        userRole === 'controller' &&
+                        (
+                            to.path.includes('/create') ||
+                            to.path.includes('/edit') ||
+                            to.name?.toLowerCase().includes('create') ||
+                            to.name?.toLowerCase().includes('edit')
+                        )
+                    ) {
+                        next('/');
+                    }
+                    else {
+                        next();
                     }
                 }
             }).catch(() => {
@@ -285,7 +299,7 @@ router.beforeEach((to, from, next) => {
             });
         }
     } else {
-        next(); // Autoriser l'accès aux routes publiques
+        next(); // Route publique
     }
 });
 

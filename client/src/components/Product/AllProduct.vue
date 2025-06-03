@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
@@ -8,6 +8,11 @@
 
     const queryProducts = useQueryClient();
     const searchFilter = ref('');
+    const userRole = ref(null);
+
+    onMounted(() => {
+        userRole.value = localStorage.getItem('role');
+    });
 
     // Fetch products
     const { data: products, error } = useQuery({
@@ -103,13 +108,13 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Store</th>
+                        <th scope="col" class="px-6 py-3">Magasin</th>
                         <th scope="col" class="px-6 py-3">Code</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Minimum Stock</th>
-                        <th scope="col" class="px-6 py-3">Minimum Output</th>
-                        <th scope="col" class="px-6 py-3">Total Stock</th>
-                        <th scope="col" class="px-6 py-3">Actions</th>
+                        <th scope="col" class="px-6 py-3">Stock minimum</th>
+                        <th scope="col" class="px-6 py-3">Minimum sortie</th>
+                        <th scope="col" class="px-6 py-3">Stock total</th>
+                        <th scope="col" class="px-6 py-3" v-if="userRole === 'admin' || userRole === 'super_admin'">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,7 +133,7 @@
                             &nbsp;{{ product.detail_products_sum_qte }}
                         </td>
                         <td class="px-6 py-4">
-                            <button @click="confirmDeletetingProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button v-if="userRole === 'admin' || userRole === 'super_admin'" @click="confirmDeletetingProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

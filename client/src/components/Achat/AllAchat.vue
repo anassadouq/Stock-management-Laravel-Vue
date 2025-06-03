@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
     import SearchForm from '../DataTable/SearchForm.vue';
@@ -8,6 +8,11 @@
 
     const queryAchats = useQueryClient();
     const searchFilter = ref('');
+    const userRole = ref(null);
+
+    onMounted(() => {
+        userRole.value = localStorage.getItem('role');
+    });
 
     // Fetch achats
     const { data: achat, error } = useQuery({
@@ -99,11 +104,12 @@
             <table width="100%" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Product</th>
+                        <th scope="col" class="px-6 py-3">Client</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Quantity</th>
-                        <th scope="col" class="px-6 py-3">UP</th>
-                        <th scope="col" class="px-6 py-3">TP</th>
+                        <th scope="col" class="px-6 py-3">Produit</th>
+                        <th scope="col" class="px-6 py-3">Qte</th>
+                        <th scope="col" class="px-6 py-3">PU</th>
+                        <th scope="col" class="px-6 py-3">PT</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
@@ -116,7 +122,7 @@
                         <td class="px-6 py-4">{{ item.pu }}</td>   
                         <td class="px-6 py-4">{{ item.pu * item.qte }} DH</td>             
                         <td class="px-6 py-4">
-                            <button @click="confirmDeletingAchat(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button v-if="userRole === 'admin' || userRole === 'super_admin'" @click="confirmDeletingAchat(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

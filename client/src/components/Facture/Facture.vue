@@ -1,6 +1,7 @@
 <script setup>
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
+    import { ref, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
     import { useToast } from 'vue-toastification';
     import Navbar from '../Navbar/Navbar.vue';
@@ -9,8 +10,14 @@
     const router = useRouter();
     const toast = useToast();
     const queryClient = useQueryClient();
+    const userRole = ref(null);
+
 
     const client_id = route.params.client_id;
+
+    onMounted(() => {
+        userRole.value = localStorage.getItem('role');
+    });
 
     // Fetch factures from API
     const fetchFactures = async () => {
@@ -55,7 +62,7 @@
 <template>
     <Navbar/><br>
 
-    <RouterLink :to="`/facture/show/${client_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
+    <RouterLink v-if="userRole === 'admin' || userRole === 'super_admin'" :to="`/facture/show/${client_id}/create`" class="text-white bg-blue-500 hover:bg-blue-700 rounded-lg text-sm px-5 py-2.5 mx-1">
         <i class="pi pi-plus-circle"></i>
     </RouterLink><br><br>
 
@@ -64,7 +71,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Number</th>
+                        <th scope="col" class="px-6 py-3">Numero</th>
                         <th scope="col" class="px-6 py-3">Date</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
@@ -78,11 +85,11 @@
                                 <i class="pi pi-eye"></i>
                             </RouterLink>
 
-                            <RouterLink :to="`/facture/show/${client_id}/edit/${item.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink v-if="userRole === 'admin' || userRole === 'super_admin'" :to="`/facture/show/${client_id}/edit/${item.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>
                             </RouterLink>
 
-                            <button @click="deleteFacture(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button v-if="userRole === 'admin' || userRole === 'super_admin'" @click="deleteFacture(item.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>

@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function register(Request $request) {
         $fields = $request->validate([
             'name' => 'required|string',
-            'role' => 'required|string|in:super_admin,admin',
+            'role' => 'required|string|in:super_admin,admin,controller',
             'email' => 'required|string|email|unique:users,email',
         ]);
 

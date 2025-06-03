@@ -96,7 +96,7 @@
         <RouterLink to="magasin" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-shopping-cart"></i>
-                <p>Store</p>
+                <p>Magasin</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ magasinCount }}</h5>
@@ -106,7 +106,7 @@
         <RouterLink to="fournisseur" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-users"></i>
-                <p>Supplier</p>
+                <p>Fournisseur</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ fournisseurCount }}</h5>
@@ -116,7 +116,7 @@
         <RouterLink to="client" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-users"></i>
-                <p>Customer</p>
+                <p>Client</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ clientCount }}</h5>
@@ -126,7 +126,7 @@
         <RouterLink to="all_facture" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-file"></i>
-                <p>Invoice</p>
+                <p>Factures</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ factureCount }}</h5>
@@ -136,7 +136,7 @@
         <RouterLink to="all_achat" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-euro"></i>
-                <p>Purchase</p>
+                <p>Achats</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ achatCount }}</h5>
@@ -146,7 +146,7 @@
         <RouterLink to="all_product" class="flex flex-col items-center max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-box"></i>
-                <p>Product</p>
+                <p>Produits</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ productCount }}</h5>
@@ -156,7 +156,7 @@
         <RouterLink to="all_product" class="flex flex-col items-center max-w-sm p-6 text-red-500 bg-white border border-gray-200 rounded-lg shadow-sm md:flex-row hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
             <div class="mx-5">
                 <i class="icon pi pi-exclamation-triangle"></i>
-                <p>Low stock</p>
+                <p>Stock faible</p>
             </div>
             <div class="flex flex-col justify-between p-4 leading-normal">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight">

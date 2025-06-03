@@ -1,7 +1,7 @@
 <script setup>
     import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
     import axios from 'axios';
-    import { ref, computed } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import SearchForm from '../DataTable/SearchForm.vue';
     import { useRoute, useRouter } from 'vue-router';
     import { useToast } from 'vue-toastification';
@@ -13,6 +13,8 @@
     const toast = useToast();
     const queryClient = useQueryClient();
     const searchFilter = ref('');
+    const userRole = ref(null);
+
 
     const magasin_id = route.params.magasin_id;
 
@@ -24,6 +26,10 @@
     const { data: products, error } = useQuery({
         queryKey: ['products', magasin_id],
         queryFn: fetchProducts
+    });
+
+    onMounted(() => {
+        userRole.value = localStorage.getItem('role');
     });
 
     // Computed property for filtering items
@@ -68,11 +74,11 @@
         pdf.setFontSize(10);
             
         // Entêtes du tableau
-        pdf.text('Produit', 10, y);
+        pdf.text('Code', 10, y);
         pdf.text('Designation', 50, y);
         pdf.text('Stock min', 120, y);
         pdf.text('Min sortie', 140, y);
-        pdf.text('Total QTE', 160, y);
+        pdf.text('Stock total', 160, y);
 
         y += 10;
 
@@ -95,7 +101,7 @@
 <template>
     <Navbar/><br>
 
-    <RouterLink :to="`/product/show/${magasin_id}/create`" class="text-white bg-blue-500 hover:bg-blue-600 rounded-lg text-sm px-5 py-2.5 mx-1">
+    <RouterLink v-if="userRole === 'admin' || userRole === 'super_admin'" :to="`/product/show/${magasin_id}/create`" class="text-white bg-blue-500 hover:bg-blue-600 rounded-lg text-sm px-5 py-2.5 mx-1">
         <i class="pi pi-plus-circle"></i>
     </RouterLink><br><br>
 
@@ -112,9 +118,9 @@
                     <tr>
                         <th scope="col" class="px-6 py-3">Code</th>
                         <th scope="col" class="px-6 py-3">Designation</th>
-                        <th scope="col" class="px-6 py-3">Minimum Stock</th>
-                        <th scope="col" class="px-6 py-3">Minimum Output</th>
-                        <th scope="col" class="px-6 py-3">Total Stock</th>
+                        <th scope="col" class="px-6 py-3">Stock minimum</th>
+                        <th scope="col" class="px-6 py-3">Minimum sortie</th>
+                        <th scope="col" class="px-6 py-3">Stock total</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
@@ -133,11 +139,11 @@
                                 <i class="pi pi-eye"></i>
                             </RouterLink>
 
-                            <RouterLink :to="`/product/show/${magasin_id}/edit/${product.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
+                            <RouterLink v-if="userRole === 'admin' || userRole === 'super_admin'" :to="`/product/show/${magasin_id}/edit/${product.id}`" class="text-white bg-gray-500 hover:bg-gray-700 rounded-lg mx-3 px-5 py-3">
                                 <i class="pi pi-pencil"></i>
                             </RouterLink>
 
-                            <button @click="confirmAndDeleteProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
+                            <button v-if="userRole === 'admin' || userRole === 'super_admin'" @click="confirmAndDeleteProduct(product.id)" class="text-white bg-red-500 hover:bg-red-800 rounded-lg px-5 py-2.5">
                                 <i class="pi pi-trash"></i>
                             </button>
                         </td>
